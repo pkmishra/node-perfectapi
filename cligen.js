@@ -1,19 +1,21 @@
 var fs = require('fs');
 var path = require('path');
 var program = require('commander');
-var cfg = require(path.join(__dirname, 'config.js'));
+var cfg = require('./config.js');
 
 /*
   parses the command line and executes callback function with the following parameters:
     - commandName = name of the command that was requested
 	- config = options & parameters that were passed in standard perfectAPI config format (includes defaults)
 */
-exports.parse = function(callback) {
-	var commands = cfg.getCommands();
+exports.parse = function(configPath, callback) {
+	var commands = cfg.getCommands(configPath);
 
+	/*
 	var packagePath = path.resolve(__dirname, '..', '..', 'package.json');
 	var version = JSON.parse(fs.readFileSync(packagePath)).version; 
 	program.version(version);
+	*/
 	
 	for (var i=0;i<commands.length;i++) {
 		var command = commands[i];
@@ -42,8 +44,8 @@ exports.parse = function(callback) {
 					parameters.push(arguments[i]);
 					
 				args.push(parameters);
-				var finalConfig = cfg.getDefaultConfig(commandName);
-				finalConfig[cfg.getCommandParameterName(commandName)] = parameters;
+				var finalConfig = cfg.getDefaultConfig(configPath, commandName);
+				finalConfig[cfg.getCommandParameterName(configPath, commandName)] = parameters;
 				finalConfig.options = cfg.merge(finalConfig.options, options);	//merge the parsed options into the standard perfectAPI options
 				
 				callback(commandName, finalConfig);

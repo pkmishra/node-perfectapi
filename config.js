@@ -3,16 +3,15 @@ var path = require('path');
 
 exports.getCommands = getCommands;
 
-function getCommands() {
-	var perfectapiPath = path.resolve(__dirname, '..', '..', 'perfectapi.json');
-	var perfectapiJson = JSON.parse(fs.readFileSync(perfectapiPath)); 
+function getCommands(configPath) {
+	var perfectapiJson = JSON.parse(fs.readFileSync(configPath)); 
 	var commands = perfectapiJson.signature;
 
 	return commands;
 }
 
-function getCommandByName(commandName) {
-	var commands = getCommands();
+function getCommandByName(configPath, commandName) {
+	var commands = getCommands(configPath);
 	for (var i=0;i<commands.length;i++) {
 		if (commands[i].name == commandName) return commands[i];
 	}
@@ -20,13 +19,13 @@ function getCommandByName(commandName) {
 	return null;
 }
 
-exports.getCommandParameterName = function(commandName) {
+exports.getCommandParameterName = function(configPath, commandName) {
 
-	return getCommandByName(commandName).parameter.name;
+	return getCommandByName(configPath, commandName).parameter.name;
 }
 
-exports.getDefaultConfig = function(commandName) {
-	var command = getCommandByName(commandName);
+exports.getDefaultConfig = function(configPath, commandName) {
+	var command = getCommandByName(configPath, commandName);
 	
 	var config = {};
 	

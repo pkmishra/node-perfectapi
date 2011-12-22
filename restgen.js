@@ -1,15 +1,10 @@
 var fs = require('fs');
 var path = require('path');
 var express = require('express');
-var cfg = require(path.join(__dirname, 'config.js'));
+var cfg = require('./config.js');
 
-exports.parse = function(callback) {
-	var perfectapiPath = path.resolve(__dirname, '..', '..', 'perfectapi.json');
-	var perfectapiJson = JSON.parse(fs.readFileSync(perfectapiPath)); 
-	var commands = perfectapiJson.signature;
-
-	var packagePath = path.resolve(__dirname, '..', '..', 'package.json');
-	var version = JSON.parse(fs.readFileSync(packagePath)).version; 
+exports.parse = function(configPath, callback) {
+	var commands = cfg.getCommands(configPath);
 	
 	var app = express.createServer();
 	app.configure(function(){
@@ -18,19 +13,21 @@ exports.parse = function(callback) {
 		//app.use(app.router);
 	});
 	
+	/*
 	app.get('/version', function(req, res, next){
 		res.end(version);
 	});
+	*/
 	
 	for (var i=0;i<commands.length;i++) {
 	
-		setupListener(app, commands[i], callback);
+		setupListener(configPath, app, commands[i], callback);
 	};
 	
 	app.listen(3000);
 };
 
-function setupListener(app, command, callback) {
+function setupListener(configPath, app, command, callback) {
 	var name = command.name;
 	var part = command.path;
 	
@@ -40,7 +37,7 @@ function setupListener(app, command, callback) {
 			//JSON format.
 			//curl example:
 			//curl -v -H "Content-Type: application/json" -d "{\"scripts\":[\"ubuntu11.10\", \"ubuntu11.10/juju\"]}" -X POST localhost:3000/apis/gen
-			var defaultConfig = cfg.getDefaultConfig(name);
+			var defaultConfig = cfg.getDefaultConfig(configPath, name);
 			var config = cfg.merge(defaultConfig, req.body);
 
 			if (command.environment) {
