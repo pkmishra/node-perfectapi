@@ -1,12 +1,12 @@
 
-Node-PerfectAPI goal
+Goal
 ===============
 
-The goal of this package is to allow a developer to easily enable PerfectAPI configuration support for their package.  The benefits of doing this are that you obtain the following with little or no additional work:
-* expose JSON+REST-based interface to your package's API
-* expose Command-line-interface (CLI) to your package's API
-* automated documentation of your API (FUTURE)
-* gain the benefit of PerfectAPI bindings (FUTURE), which allow your code to be called from any of the many programming languages that have PerfectAPI binding support.
+The goal of this package is to allow a developer to easily enable PerfectAPI configuration support for their own package.  The benefits of doing this are that you obtain the following with little or no additional work:
+ * expose JSON+REST-based interface to your package's API
+ * expose Command-line-interface (CLI) to your package's API
+ * automated documentation of your API (FUTURE)
+ * gain the benefit of PerfectAPI bindings (FUTURE), which allow your code to be called from any of the many programming languages that have PerfectAPI binding support.
 
 Still a WIP
 ---------
@@ -22,7 +22,8 @@ $ npm install perfectapi
 Command-line Usage
 -----
 First, create a configuration file.  See next section for how to do that in detail.   Once you have a configuration file, a sample usage for command-line is:
-```javascript
+
+```
 #!/usr/bin/env node
 
 var perfectapi = require('perfectapi'); 
@@ -44,7 +45,8 @@ perfectapi.commandline(configFilePath, function(commandName, config) {
 Server Usage
 ----
 First, create a configuration file.  See next section for how to do that in detail.   Once you have a configuration file, a sample usage for server is:
-```javascript
+
+```
 var perfectapi = require('perfectapi');
 var path = require('path');
 var configFilePath =  path.resolve(__dirname, 'perfectapi.json');
@@ -70,7 +72,8 @@ Configuration File
 -----------
 
 The PerfectAPI configuration file is a JSON-formatted file that usually lives in your package root folder.  It can be called anything, but we recommend `perfectapi.json`.  An example file is:
-```json
+
+```
 {"signature": [
 	{ 
 		"name": "gen",
@@ -103,6 +106,7 @@ The PerfectAPI configuration file is a JSON-formatted file that usually lives in
 ```
 
 The above file represents an API with 2 commands, namely `gen` and `scripts`.  The easiest way to understand this is to view the help from a command-line app that uses this configuration:
+
 ```
 $ myapp --help
 
@@ -121,6 +125,7 @@ $ myapp --help
     -h, --help  output usage information
 ```
 ...and focusing on just one of the commands:
+
 ```
 $ myapp gen --help
 
