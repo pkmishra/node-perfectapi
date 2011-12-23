@@ -1,7 +1,7 @@
 
 var cli=require("./cligen.js");
 //var cfg=require("./config.js");
-var rest=require("./restgen.js");
+var connect=require("./connect.js");
 
 exports.commandline = cli.parse;
-exports.rest = rest.parse;
+exports.restify = connect.restify;

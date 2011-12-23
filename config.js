@@ -18,11 +18,22 @@ function getCommandByName(configPath, commandName) {
 	
 	return null;
 }
+exports.getCommandByName = getCommandByName;
+
+exports.getMatchingCommandByRequestPath = function(configPath, requestPath) {
+	var commands = getCommands(configPath);
+	for(var i=0;i<commands.length;i++) {
+		if (commands[i].path == requestPath) 
+			return commands[i].name;
+	}
+	
+	return null;
+};
 
 exports.getCommandParameterName = function(configPath, commandName) {
 
 	return getCommandByName(configPath, commandName).parameter.name;
-}
+};
 
 exports.getDefaultConfig = function(configPath, commandName) {
 	var command = getCommandByName(configPath, commandName);
