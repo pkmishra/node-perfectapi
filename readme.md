@@ -44,28 +44,36 @@ perfectapi.commandline(configFilePath, function(commandName, config) {
 
 Server Usage
 ----
-First, create a configuration file.  See next section for how to do that in detail.   Once you have a configuration file, a sample usage for server is:
+First, create a configuration file.  See next section for how to do that in detail.   Once you have a configuration file, a sample usage for server (using express) is:
 
 ```
 var perfectapi = require('perfectapi');
 var path = require('path');
 var configFilePath =  path.resolve(__dirname, 'perfectapi.json');
 
-perfectapi.rest(configFilePath, function(err, commandName, config, callback) {
-	if (err) return console.log('error: ' + err);
-	
-	switch (commandName) {
-		case 'command1': 
-			doSomething(config, function(err, result) {
-				 //let the REST request know that we're done.  Result will be sent to the caller
-				callback(err, result);  
-			});
-			break;
-		case 'command2':
-			//do something else
-			break;
-	};
+var perfectapi = require('./../perfectapi/api.js');
+var express = require('express');
+
+var app = express.createServer();
+
+app.configure(function(){
+	app.use(express.bodyParser());
+	app.use(perfectapi.restify(path.resolve(__dirname + '/perfectapi.json')));
 });
+
+app.post('/gen', function(req, res) {
+	var config = req.perfectapi.config;
+	
+	res.end('We can do something here...we have the config etc.');
+});
+
+app.post('/scripts', function(req, res) {
+	var config = req.perfectapi.config;
+	
+	res.end('We can do something here...');
+});
+
+app.listen(3000);
 ```
 
 Configuration File
