@@ -1,4 +1,3 @@
-
 Goal
 ===============
 
@@ -17,7 +16,8 @@ Install
 -------
 
 The usual for Node.js stuff
-$ npm install perfectapi
+
+    $ npm install perfectapi
 
 Command-line Usage
 -----
