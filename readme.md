@@ -9,7 +9,7 @@ The goal of this package is to allow a developer to easily enable PerfectAPI con
 
 Still a WIP
 ---------
-This package is still in early alpha.  YMMV.
+This package is still in early alpha.  Don't even consider using it yet.
 
 
 Install
