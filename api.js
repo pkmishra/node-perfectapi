@@ -1,7 +1,18 @@
+/* 
+ * Usage: 
+ * 
+ * var perfectapi = require('perfectapi');
+ * var parser = new perfectapi.Parser();
+ * 
+ * parser.parse(pathToJsonConfig);
+ * parser.on("mycommand", function(config, callback) {
+ * 	 //do mycommand code, putting results into "result" object
+ *   
+ *   //after done
+ *   callback(err, result);
+ * });
+*/
 
 var cli=require("./cligen.js");
-//var cfg=require("./config.js");
-var connect=require("./connect.js");
 
-exports.commandline = cli.parse;
-exports.restify = connect.restify;
+exports.Parser = cli.Parser;

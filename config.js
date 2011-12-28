@@ -6,7 +6,44 @@ exports.getCommands = getCommands;
 function getCommands(configPath) {
 	var perfectapiJson = JSON.parse(fs.readFileSync(configPath)); 
 	var commands = perfectapiJson.signature;
-
+	
+	//setup the server command
+	var cmd = {};
+	cmd.name = "server";
+	cmd.synopsis = "Run this API as a REST + JSON server";
+	cmd.description = "Use this to run as a self-hosted server, capable of responding over the web to the various commands";
+	cmd.options = [];
+	var option = {};
+	option.option = "port"; option.long="port"; option.short="p"; option.required=true; option.default=3000; 
+	option.description = "Specifies the TCP port on which the API will listen";
+	cmd.options.push(option);
+	cmd.returns = [];
+	commands.push(cmd);
+	
+	//set up REST path (endpoint)
+	var restPath = perfectapiJson.path;
+	if (!restPath || restPath=="") restPath = "/";
+	if (restPath[0]!="/") restPath = "/" + restPath;
+	if (restPath.length!=1 && restPath[restPath.length-1]!='/') restPath += '/';
+	for (var i=0;i<commands.length;i++) {
+		var cmd = commands[i];
+		cmd.path = restPath + cmd.name;
+	}
+	
+	//setup global environment
+	var env = perfectapiJson.environment;
+	if (env) {
+		for (var i=0;i<commands.length;i++) {
+			var cmd = commands[i];
+			if (cmd.environment) {
+				//already has an environment specified.  Add to that
+				cmd.environment = env.concat(cmd.environment);
+			} else {
+				cmd.environment = env;
+			}
+		}		
+	}
+	
 	return commands;
 }
 

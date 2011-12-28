@@ -1,14 +1,31 @@
 var fs = require('fs');
 var path = require('path');
 var program = require('commander');
+var util = require('util');
+var events = require('events');
 var cfg = require('./config.js');
+var server = require('./server.js');
+
+//I don't understand really, but following example from 
+//  http://elegantcode.com/2011/02/21/taking-baby-steps-with-node-js-implementing-events/
+function Parser() {
+    if(false === (this instanceof Parser)) {
+        return new Parser();
+    }
+
+    events.EventEmitter.call(this);
+}
+util.inherits(Parser, events.EventEmitter);
 
 /*
-  parses the command line and executes callback function with the following parameters:
-    - commandName = name of the command that was requested
-	- config = options & parameters that were passed in standard perfectAPI config format (includes defaults)
+  parses the command line and raises an event when a command is called:
+    - @eventName = name of the command that was requested
+	- @config = options & parameters that were passed in standard perfectAPI config format (includes defaults)
+	- @callback = function to call once command has been completed
 */
-exports.parse = function(configPath, callback) {
+
+Parser.prototype.parse = function(configPath) {
+	var self = this;
 	var commands = cfg.getCommands(configPath);
 
 	/*
@@ -48,7 +65,27 @@ exports.parse = function(configPath, callback) {
 				finalConfig[cfg.getCommandParameterName(configPath, commandName)] = parameters;
 				finalConfig.options = cfg.merge(finalConfig.options, options);	//merge the parsed options into the standard perfectAPI options
 				
-				callback(commandName, finalConfig);
+				if (commandName=="server") {
+					//special handling, we self-host the server
+					server.listen(configPath, finalConfig, function(err, newCommandName, newConfig, finalCallback) {
+						if (err) { 
+							//not sure what to do here
+							console.log("Error: " + err);
+						} else {
+							self.emit(newCommandName, newConfig, finalCallback);
+						}
+					});
+				} else {
+					//raise an event to let the actual code handle the command
+					self.emit(commandName, finalConfig, function(err, result) {
+						//caller's code can call us back to let us know the result so we can show it on the command-line
+						if (err) {
+							console.log("Error: " + err);
+						} else {
+							console.log(result);
+						}
+					});
+				}
 			});
 		
 		var options = command.options;
@@ -73,6 +110,9 @@ exports.parse = function(configPath, callback) {
 	}
 	
 	program.parse(process.argv);
-};
+}
+
+exports.Parser = Parser;
+
 
 
