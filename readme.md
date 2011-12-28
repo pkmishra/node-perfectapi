@@ -1,27 +1,36 @@
-Goal
-===============
+PerfectAPI Goals
+-----------------
+The goal of this package is to support:
 
-The goal of this package is to allow a developer to easily enable PerfectAPI configuration support for their own API.  The benefits of doing this are that you obtain the following with little or no additional work:
+ - Well-designed APIs
+ - Interoperability of APIs between different OS and programming languages
+ 
+This Node.js library is the first, and the reference implementation.  Others will follow in other languages.   There are the following components in this reference implementation:
+
+ - Native Node.js access to an API
+ - Command-line access to an API
+ - Self-hosted server exposing the API via REST+JSON
+ - (SOON) Native proxy access to other PerfectAPIs exposed over REST+JSON
+
+Reasons to use PerfectAPI
+-------------------------
+You obtain the following with little or no additional work:
 
  - expose JSON+REST-based interface to your API
  - expose Command-line-interface (CLI) to your API
- - automated documentation of your API (FUTURE)
- - gain the benefit of PerfectAPI bindings (FUTURE), which allow your code to be called from any of the many programming languages that have PerfectAPI binding support.
+ - (FUTURE) automated documentation of your API 
+ - (FUTURE) gain the benefit of PerfectAPI bindings, which allow your code to be called from any of the many programming languages that have PerfectAPI binding support.
 
 Reasons not to use PerfectAPI
 -----------------------------
 
+ - It's a little new.  You may want to wait for it to stabilize a bit.  In particular, the JSON configuration may change.
  - If your API is primarily a simple data access layer, then you may be better off using another library that specializes in data access.  
  - You want control over what your API looks like. (PerfectAPI sacrifices some of your design freedom in order to promote a consistent API model).
  - You want a human-friendly REST interface.  The PerfectAPI REST interface is not friendly to humans.  We balance that loss by providing both command-line and native programmatic access to your API from many popular programming languages.
 
-Still a WIP
----------
-This package is still in early alpha.  Don't even consider using it yet. 
-
 Install
 -------
-
 The usual for Node.js stuff
 
     $ npm install perfectapi
@@ -30,27 +39,9 @@ or for a global install:
 
     $ sudo npm install -g perfectapi
 
-Usage from another Node app
----------------------------
-
-Other node apps can use your library `myNodeLib` like below.  This is exactly the same as you might access any other API, expect that the function signature is always the same `(config, callback)` and the callback is also always the same `function(err, result)`.  `result` is an object with the structure defined in the configuration.
-
-```
-var test1=require('myNodeLib');
-
-var config = {}
-test1.mycommand(config, function(err, result) {
-	if (err) {
-		console.log('something went wrong: ' + err);
-	} else {
-		console.log('output = ' + JSON.stringify(result));
-	}
-});
-```
-
-Usage from Command-line
------------------------
-First, create a configuration file.  See next section for how to do that in detail.   Once you have a configuration file, a sample usage is:
+How to include in your API
+--------------------------
+First, create a `perfectapi.json` configuration file.  See "Configuration File" section further below for an example.   Once you have a configuration file, a sample usage is:
 
 ```
 #!/usr/bin/env node
@@ -61,6 +52,7 @@ var path = require('path');
 var configPath = path.resolve(__dirname, 'perfectapi.json');
 var parser = new perfectapi.Parser();
 
+//handle the commands
 parser.on("mycommand", function(config, callback) {
 	//do mycommand code, putting results into "result" object
 
@@ -83,6 +75,40 @@ for( var myFunc in api ) {
 }
 ```
 
+In your `package.json` file, be sure to specify the above file as a "bin", so that the app can be called from the command-line, e.g.
+
+```	
+{   "name":             "myNodeLib"
+,   "version":          "0.0.1"
+    ,"description": "My brilliant API"
+    ,"main": "./bin/myNodeLib.js"
+	,"bin": "./bin/myNodeLib.js"
+,   "engines": {
+        "node" : ">=0.6.5"
+    }
+,   "dependencies":    {   
+        "perfectapi": ">=0.0.1"
+    }
+}
+```
+Thats it.  
+
+Usage from another Node app
+---------------------------
+Other node apps can use your library (e.g. `myNodeLib`) like below.  This is exactly the same as you might access any other API, except that the function signature is always the same `(config, callback)` and the callback is also always the same `function(err, result)`.  `result` is a return object with the structure defined in the configuration.
+
+```
+var test1=require('myNodeLib');
+
+var config = {}
+test1.mycommand(config, function(err, result) {
+	if (err) {
+		console.log('something went wrong: ' + err);
+	} else {
+		console.log('output = ' + JSON.stringify(result));
+	}
+});
+```
 
 Configuration File
 -----------
@@ -139,11 +165,16 @@ $ myapp --help
     scripts [options]
     Lists available scripts for use in gen
 
+    server [options]
+    Run this API as a REST + JSON server
+
   Options:
 
     -h, --help  output usage information
 ```
-...and focusing on just one of the commands:
+The `server` command is added automatically (to self-host your API).
+
+Focusing on just one of the commands:
 
 ```
 $ myapp gen --help
