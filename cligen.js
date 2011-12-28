@@ -25,7 +25,7 @@ util.inherits(Parser, events.EventEmitter);
 */
 
 Parser.prototype.parse = function(configPath) {
-	var self = this;
+	var self = this;	
 	var commands = cfg.getCommands(configPath);
 
 	/*
@@ -110,11 +110,44 @@ Parser.prototype.parse = function(configPath) {
 			}
 		}
 	}
-	
+
 	program.parse(process.argv);
+	
+	return initNativeAPI(configPath, self);	
 }
 
 exports.Parser = Parser;
 
+function initNativeAPI(configPath, emitter) {
+	//expose functions for each command
+	//function commandName(config, callback)
+	var commands = cfg.getCommands(configPath);
+	var api = {}
+	
+	for(var i=0;i<commands.length;i++) {
+		var cmd = commands[i];
+		
+		var commandFunction = getCommandFunction(configPath, cmd.name, emitter)
+		
+		api[cmd.name] = commandFunction;
+	}
+	
+	return api;
+};
+
+function getCommandFunction(configPath, commandName, emitter) {
+	var commandFunction = function(config, callback) {
+		console.log('handling command ' + commandName);
+		var finalConfig = cfg.getDefaultConfig(configPath, commandName);
+		var paramName = cfg.getCommandParameterName(configPath, commandName);
+		if (paramName) 
+			finalConfig[paramName] = parameters;
+		finalConfig.options = cfg.merge(finalConfig.options, config.options);	//merge the parsed options into the standard perfectAPI options
+	
+		emitter.emit(commandName, finalConfig, callback);
+	}
+	
+	return commandFunction;
+}
 
 
