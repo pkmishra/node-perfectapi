@@ -37,11 +37,10 @@ exports.restify = function (jsonConfigPath){
 				}
 			}
 			
-			req.url = "/" + matchedCommandName;	//override
 			req.perfectapi = {};
 			req.perfectapi.commandName = matchedCommandName;
 			req.perfectapi.config = config;
-			console.log(req);
+			//console.log(req);
 		};
 		
 		//console.log('RESTIFIED was called.  Not used though - ' + matchedCommandName);

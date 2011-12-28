@@ -69,7 +69,13 @@ exports.getMatchingCommandByRequestPath = function(configPath, requestPath) {
 
 exports.getCommandParameterName = function(configPath, commandName) {
 
-	return getCommandByName(configPath, commandName).parameter.name;
+	var param = getCommandByName(configPath, commandName).parameter
+	if (param) {
+		return param.name;
+	} else {
+		return null;
+	}
+	
 };
 
 exports.getDefaultConfig = function(configPath, commandName) {

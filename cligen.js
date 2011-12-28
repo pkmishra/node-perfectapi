@@ -62,7 +62,9 @@ Parser.prototype.parse = function(configPath) {
 					
 				args.push(parameters);
 				var finalConfig = cfg.getDefaultConfig(configPath, commandName);
-				finalConfig[cfg.getCommandParameterName(configPath, commandName)] = parameters;
+				var paramName = cfg.getCommandParameterName(configPath, commandName);
+				if (paramName) 
+					finalConfig[paramName] = parameters;
 				finalConfig.options = cfg.merge(finalConfig.options, options);	//merge the parsed options into the standard perfectAPI options
 				
 				if (commandName=="server") {
