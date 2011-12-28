@@ -2,6 +2,7 @@ Goal
 ===============
 
 The goal of this package is to allow a developer to easily enable PerfectAPI configuration support for their own API.  The benefits of doing this are that you obtain the following with little or no additional work:
+
  - expose JSON+REST-based interface to your API
  - expose Command-line-interface (CLI) to your API
  - automated documentation of your API (FUTURE)
@@ -33,6 +34,7 @@ Usage from another Node app
 ---------------------------
 
 Other node apps can use your library `myNodeLib` like below.  This is exactly the same as you might access any other API, expect that the function signature is always the same `(config, callback)` and the callback is also always the same `function(err, result)`.  `result` is an object with the structure defined in the configuration.
+
 ```
 var test1=require('myNodeLib');
 
