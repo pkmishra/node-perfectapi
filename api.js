@@ -13,6 +13,8 @@
  * });
 */
 
-var cli=require("./cligen.js");
+var cli=require("./lib/cligen.js");
+var proxy=require("./lib/proxy.js");
 
 exports.Parser = cli.Parser;
+exports.proxy = proxy.proxy;

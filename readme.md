@@ -1,5 +1,5 @@
-PerfectAPI Goals
------------------
+Package Goal
+------------
 The goal of this package is to support:
 
  - Well-designed APIs
