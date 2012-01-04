@@ -68,12 +68,8 @@ parser.on("anothercommand", function(config, callback) {
 	callback(err, result);
 });
 
-//expose the api to other Node apps
-var api = parser.parse(configPath);
-exports.api = api;
-for( var myFunc in api ) {
-	exports[myFunc] = api[myFunc];
-}
+//expose the api
+module.exports = parser.parse(configPath);
 ```
 
 In your `package.json` file, be sure to specify the above file as a "bin", so that the app can be called from the command-line, e.g.
@@ -88,7 +84,7 @@ In your `package.json` file, be sure to specify the above file as a "bin", so th
         "node" : ">=0.6.5"
     }
 ,   "dependencies":    {   
-        "perfectapi": ">=0.0.1"
+        "perfectapi": ">=0.0.3"
     }
 }
 ```
