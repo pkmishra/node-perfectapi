@@ -10,7 +10,7 @@ This Node.js library is the first, and the reference implementation.  Others wil
  - Native Node.js access to an API
  - Command-line access to an API
  - Self-hosted server exposing the API via REST+JSON
- - (SOON) Native proxy access to other PerfectAPIs exposed over REST+JSON
+ - Native proxy access to other PerfectAPIs exposed over REST+JSON
 
 Reasons to use PerfectAPI
 -------------------------
@@ -18,13 +18,14 @@ You obtain the following with little or no additional work:
 
  - expose JSON+REST-based interface to your API
  - expose Command-line-interface (CLI) to your API
+ - (FUTURE) javascript PerfectAPI binding (call your API directly from javascript)
  - (FUTURE) automated documentation of your API 
  - (FUTURE) gain the benefit of PerfectAPI bindings, which allow your code to be called from any of the many programming languages that have PerfectAPI binding support.
 
 Reasons not to use PerfectAPI
 -----------------------------
 
- - It's a little new.  You may want to wait for it to stabilize a bit.  In particular, the JSON configuration may change.
+ - It's a little new.  You may want to wait for it to stabilize a bit.  
  - If your API is primarily a simple data access layer, then you may be better off using another library that specializes in data access.  
  - You want control over what your API looks like. (PerfectAPI sacrifices some of your design freedom in order to promote a consistent API model).
  - You want a human-friendly REST interface.  The PerfectAPI REST interface is not friendly to humans.  We balance that loss by providing both command-line and native programmatic access to your API from many popular programming languages.
@@ -109,6 +110,30 @@ test1.mycommand(config, function(err, result) {
 	}
 });
 ```
+
+Usage via proxy in Node
+-----------------------
+The API you are accessing could be written in any language, but is written using PerfectAPI, and hosted somewhere on the Internet.  The syntax is almost identical to the normal Node usage, with the following differences:
+
+ - references a proxy endpoint (e.g. http://myserver.com:3000/apis) instead of the downloaded Node package
+ - user code executes in a callback (because we have to wait for the endpoint to be validated and the proxy created)
+
+```
+var perfectapi = require('perfectapi');
+perfectapi.proxy('http://myserver.com:3000/apis', function(err, test1) {
+
+	var config = {}
+	test1.mycommand(config, function(err, result) {
+		if (err) {
+			console.log('something went wrong: ' + err);
+		} else {
+			console.log('output = ' + JSON.stringify(result));
+		}
+	});
+	
+});
+```
+
 
 Configuration File
 -----------
