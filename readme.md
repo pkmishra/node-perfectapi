@@ -5,21 +5,21 @@ The goal of this package is to support:
  - Well-designed APIs
  - Interoperability of APIs between different OS and programming languages
  
-This Node.js library is the first, and the reference implementation.  Others will follow in other languages.   There are the following components in this reference implementation:
+This Node.js library is the reference implementation.  Others will follow in other languages.   There are the following components in this reference implementation:
 
  - Native Node.js access to an API
  - Command-line access to an API
- - Self-hosted server exposing the API via REST+JSON
- - Native proxy access to other PerfectAPIs exposed over REST+JSON
+ - Self-hosted server exposing the API via JSONP+WebSockets
+ - Native proxy access to other PerfectAPIs exposed over JSONP+WebSockets
 
 Reasons to use PerfectAPI
 -------------------------
 You obtain the following with little or no additional work:
 
- - expose JSON+REST-based interface to your API
+ - expose JSONP+WebSockets interface to your API
  - expose Command-line-interface (CLI) to your API
- - javascript PerfectAPI binding (call your API directly from javascript)
- - gain the benefit of PerfectAPI bindings, which allow your code to be called from any of the many programming languages that have PerfectAPI binding support.
+ - Javascript binding (call your API directly from javascript)
+ - gain the benefit of PerfectAPI bindings, which allow your code to be called from any of the many (FUTURE) programming languages that have PerfectAPI binding support.
  - (FUTURE) automated documentation of your API 
 
 Reasons not to use PerfectAPI
@@ -28,7 +28,7 @@ Reasons not to use PerfectAPI
  - It's a little new.  You may want to wait for it to stabilize a bit.  
  - If your API is primarily a simple data access layer, then you may be better off using another library that specializes in data access.  
  - You want control over what your API looks like. (PerfectAPI sacrifices some of your design freedom in order to promote a consistent API model).
- - You want a human-friendly REST interface.  The PerfectAPI REST interface is not friendly to humans.  We balance that loss by providing both command-line and native programmatic access to your API from many popular programming languages.
+ - You want a human-friendly REST interface.  The PerfectAPI JSONP+WebSocket interface is not friendly to humans.  We balance that loss by providing both command-line and native programmatic access to your API from many popular programming languages.
 
 Install
 -------
@@ -42,7 +42,7 @@ or for a global install:
 
 How to include in your API
 --------------------------
-First, create a `perfectapi.json` configuration file.  See "Configuration File" section further below for an example.   Once you have a configuration file, a sample usage is:
+First, create a `perfectapi.json` configuration file.  See [Configuration File](wiki/perfectapi-config-file-format) for details.   Once you have a configuration file, a sample usage is:
 
 ```
 #!/usr/bin/env node
@@ -123,72 +123,10 @@ myNodeLib.callApi('myCommand', config, function(err, result) {
 </script>
 ```
 
-Usage via proxy in Node
+Usage from command-line
 -----------------------
-The API you are accessing could be written in any language, but is written using PerfectAPI, and hosted somewhere on the Internet.  The syntax is almost identical to the normal Node usage, with the following differences:
 
- - references a proxy endpoint (e.g. http://myserver.com:3000/apis) instead of the downloaded Node package
- - user code executes in a callback (because we have to wait for the endpoint to be validated and the proxy created)
-
-```
-var perfectapi = require('perfectapi');
-perfectapi.proxy('http://myserver.com:3000/apis', function(err, test1) {
-
-	var config = {}
-	test1.mycommand(config, function(err, result) {
-		if (err) {
-			console.log('something went wrong: ' + err);
-		} else {
-			console.log('output = ' + JSON.stringify(result));
-		}
-	});
-	
-});
-```
-
-
-Configuration File
------------
-
-The PerfectAPI configuration file is a JSON-formatted file that usually lives in your package root folder.  It can be called anything, but we recommend `perfectapi.json`.  An example file is:
-
-```
-{	
-	"exports": "amigen",
-	"signature": [
-		{ 
-			"name": "gen",
-			"synopsis": "Generates a new Amazon EC2 image using the supplied scripts",
-			"description": "Using a baseAMI and a set of scripts, builds up (or finds existing) AMI image that matches the criteria",
-			"verb": "POST",
-			"parameter": {"name": "scripts", "required":"true", "type":"multi"},
-			"options": 
-				[{"option": "root", "long":"root", "short":"r", "required":"false", "default":"scripts", "description":"specify the root folder where scripts can be found"},
-				 {"option": "ami", "default":"ami-bf62a9d6", "long":"ami", "short":"a", "description":"the AMI name that will form the basis of the new images"},
-				 {"flag": "publish", "long":"publish", "short":"p", "default":"false", "description":"if set, the resulting AMI(s) will be made public"}],
-			"returns": 
-				[{"name":"ami", "description":"Amazon AMI Image Id, e.g. ami-bf62a9d6"} ]
-		},
-		{
-			"name": "scripts",
-			"synopsis": "Lists available scripts for use in gen",
-			"description": "Finds the available scripts, which are stored in subfolders of the root (see root option)",
-			"verb": "GET",
-			"options": 
-				[{"option": "root", "required":"false", "long":"root", "default":"scripts", "short":"r"}],
-			"returns": 
-				[{"name":"scripts", "type":"list", "description":"List of scripts relative to the root path"} ]
-		}
-	], 
-	"path": "apis",
-	"environment": [
-		{"parameter": "AWS_ACCESS_KEY_ID", "long":"awskeyid", "short":"k", "required":"true"},
-		{"parameter": "AWS_SECRET_ACCESS_KEY", "long":"awssecretkey", "short":"s", "required":"true"}
-	]
-}
-```
-
-The above file represents an API with 2 commands, namely `gen` and `scripts`.  The easiest way to understand this is to view the help from a command-line app that uses this configuration:
+Examples:
 
 ```
 $ myapp --help
@@ -227,4 +165,25 @@ $ myapp gen --help
     -p, --publish      if set, the resulting AMI(s) will be made public
 ```
 
+Usage via proxy in Node
+-----------------------
+This is for accessing other PerfectAPI interfaces from Node.js.   The API you are accessing could be written in any language, but is written using PerfectAPI, and hosted somewhere on the Internet.  The syntax is almost identical to the normal Node usage, with the following differences:
 
+ - references a proxy endpoint (e.g. http://myserver.com:3000/apis) instead of the downloaded Node package
+ - user code executes in a callback (because we have to wait for the endpoint to be validated and the proxy created)
+
+```
+var perfectapi = require('perfectapi');
+perfectapi.proxy('http://myserver.com:3000/apis', function(err, test1) {
+
+	var config = {}
+	test1.mycommand(config, function(err, result) {
+		if (err) {
+			console.log('something went wrong: ' + err);
+		} else {
+			console.log('output = ' + JSON.stringify(result));
+		}
+	});
+	
+});
+```
