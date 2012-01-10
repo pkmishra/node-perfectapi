@@ -42,7 +42,7 @@ or for a global install:
 
 How to include in your API
 --------------------------
-First, create a `perfectapi.json` configuration file.  See [Configuration File](wiki/perfectapi-config-file-format) for details.   Once you have a configuration file, a sample usage is:
+First, create a `perfectapi.json` configuration file.  See [Configuration File](node-perfectapi/wiki/perfectapi-config-file-format) for details.   Once you have a configuration file, a sample usage is:
 
 ```
 #!/usr/bin/env node
