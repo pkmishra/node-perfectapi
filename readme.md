@@ -18,9 +18,9 @@ You obtain the following with little or no additional work:
 
  - expose JSON+REST-based interface to your API
  - expose Command-line-interface (CLI) to your API
- - (FUTURE) javascript PerfectAPI binding (call your API directly from javascript)
+ - javascript PerfectAPI binding (call your API directly from javascript)
+ - gain the benefit of PerfectAPI bindings, which allow your code to be called from any of the many programming languages that have PerfectAPI binding support.
  - (FUTURE) automated documentation of your API 
- - (FUTURE) gain the benefit of PerfectAPI bindings, which allow your code to be called from any of the many programming languages that have PerfectAPI binding support.
 
 Reasons not to use PerfectAPI
 -----------------------------
@@ -84,7 +84,7 @@ In your `package.json` file, be sure to specify the above file as a "bin", so th
         "node" : ">=0.6.5"
     }
 ,   "dependencies":    {   
-        "perfectapi": ">=0.0.3"
+        "perfectapi": ">=0.0.6"
     }
 }
 ```
@@ -105,6 +105,22 @@ test1.mycommand(config, function(err, result) {
 		console.log('output = ' + JSON.stringify(result));
 	}
 });
+```
+
+Usage from Javascript
+---------------------
+Assuming the service is running at http://myserver.com:3000/apis, code looks like below: 
+
+```
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script src="//myserver.com:3000/socket.io/socket.io.js"></script>
+<script src="//myserver.com:3000/apis/jquery.perfectapi.js"></script>
+
+<script>
+myNodeLib.callApi('myCommand', config, function(err, result) {
+  ...do stuff
+});
+</script>
 ```
 
 Usage via proxy in Node
@@ -138,6 +154,7 @@ The PerfectAPI configuration file is a JSON-formatted file that usually lives in
 
 ```
 {	
+	"exports": "amigen",
 	"signature": [
 		{ 
 			"name": "gen",

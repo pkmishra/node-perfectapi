@@ -1,6 +1,6 @@
 {   "name":             "perfectapi"
-,   "version":          "0.0.5"
-    ,"description": "Provides various bindings to enable a package to expose itself via REST, command-line, and be used (via proxy) from any computer language"
+,   "version":          "0.0.6"
+    ,"description": "Provides various bindings to enable a package to expose itself via Internet, command-line, and be used (via proxy) from any computer language"
 ,   "author":  {"name": "Steve Campbell", "email": "steve@perfectapi.com" }
     ,"keywords": "API, perfectapi"
     ,"homepage": "http://www.perfectapi.com/"
@@ -12,7 +12,9 @@
     }
 ,   "dependencies":    {   
 		"express":  ">=2.5.0",
-		"winston": ">=0.5.9"
+		"winston": ">=0.5.9",
+		"socket-io": ">=0.8.7",
+		"uuid-js": ">="0.7.4"
     }
 ,   "repository" :
     {
