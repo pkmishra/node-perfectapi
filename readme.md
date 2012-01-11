@@ -20,7 +20,7 @@ You obtain the following with little or no additional work:
  - expose Command-line-interface (CLI) to your API
  - Javascript binding (call your API directly from javascript)
  - gain the benefit of PerfectAPI bindings, which allow your code to be called from any of the many (FUTURE) programming languages that have PerfectAPI binding support.
- - (FUTURE) automated documentation of your API 
+ - Test page for your users to learn/experiment/test your API 
 
 Reasons not to use PerfectAPI
 -----------------------------
