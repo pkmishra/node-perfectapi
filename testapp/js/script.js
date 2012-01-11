@@ -36,6 +36,7 @@ $(function(){
 		
 		_papi.bindSelectList(select, eligibleCommands, 'name', function(command) {return command.name + ' - ' + command.synopsis});
 		if (eligibleCommands.length > 0) {
+			showCommand(eligibleCommands[0])
 			showEnvironment(eligibleCommands[0]);
 			showParameter(eligibleCommands[0]);
 			showOptions(eligibleCommands[0]);
@@ -44,6 +45,12 @@ $(function(){
 		var hiddenConfig = $('#hiddenConfig');
 		hiddenConfig.val(JSON.stringify(data));
 	});
+	
+	function showCommand(command) {
+		var descSpan = $('#commandDescription');
+		
+		descSpan.text(command.description || command.synopsis || '');
+	}
 	
 	function showEnvironment(command) {
 		if (!command.environment) return;
@@ -118,7 +125,7 @@ $(function(){
 		var liLabel = '<li class="dynamicCommandAdded"><label>';
 		var checkit = (flag['default'] == 'true');
 		liLabel += '<input type="checkbox" ' + (checkit ? 'checked="checked" ' : '') + 'name="' + flag.flag + '" id="' + flag.flag + '">';
-		liLabel += '<span>' + flag.description + '</span>';
+		liLabel += '<span>' + flag.flag + ' - ' + flag.description + '</span>';
 		liLabel += '</label></li>';
 		
 		flagsList.append(liLabel);
@@ -153,6 +160,7 @@ $(function(){
 	
 		$('.dynamicCommandAdded').remove();		//remove previously added dynamic html
 
+		showCommand(command)
 		showEnvironment(command);
 		showParameter(command);
 		showOptions(command);
@@ -176,8 +184,9 @@ $(function(){
 				config[cmdConfig.parameter.name] = val;
 		}
 		
-		config.options = {};
 		if (cmdConfig.options) {
+			config.options = {};
+			var foundConfig = false;
 			for(var i=0;i<cmdConfig.options.length;i++) {
 				var opt = cmdConfig.options[i];
 				
@@ -187,25 +196,35 @@ $(function(){
 					var optVal = $('#' + name).val();
 					if (optVal != '') {
 						config.options[name] = optVal;
+						foundConfig = true;
 					}			
 				} else {
 					var name = opt.flag;
 					var checkedBox = $('#' + name).is(':checked');
-					if (checkedBox)
+					if (checkedBox) {
 						config.options[name] = true;
+						foundConfig = true;
+					}
 				}
 			}
+			
+			if (!foundConfig) delete config.options;
 		}
 		
-		config.environment = {};
 		if (cmdConfig.environment) {
+			config.environment = {};
+			var foundEnvironment = false;
 			for (var i=0;i<cmdConfig.environment.length;i++) {
 				var env = cmdConfig.environment[i];
 				
 				var val = $('#' + env.parameter).val();
-				if (val != '')
+				if (val != '') {
+					foundEnvironment = true;
 					config.environment[env.parameter] = val;
+				}
 			}
+			
+			if (!foundEnvironment) delete config.environment;
 		}
 		
 		
