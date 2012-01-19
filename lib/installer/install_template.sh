@@ -5,12 +5,9 @@
 #   node_modules/amigen/ - root path of module, where files are currently
 #   /lib/amigen/bin/amigen.js - final path of bin file
 #   amigen - name of service
+#   3001 - port number
 # 
 
-if [[ $EUID -ne 0 ]]; then
-echo "This script must be run as root or using sudo" 1>&2
-exit 1
-fi
 
 # add user to run the service
 adduser --system --group amigen
