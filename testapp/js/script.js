@@ -31,7 +31,7 @@ $(function(){
 		
 		var eligibleCommands = [];
 		for (var i=0;i<data.signature.length;i++) {
-			if (data.signature[i].name !== 'server') eligibleCommands.push(data.signature[i]);
+			if (!data.signature[i].preventUseOnServer) eligibleCommands.push(data.signature[i]);
 		}
 		
 		_papi.bindSelectList(select, eligibleCommands, 'name', function(command) {return command.name + ' - ' + command.synopsis});
