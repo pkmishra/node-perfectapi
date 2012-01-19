@@ -7,6 +7,11 @@
 #   amigen - name of service
 # 
 
+if [[ $EUID -ne 0 ]]; then
+echo "This script must be run as root or using sudo" 1>&2
+exit 1
+fi
+
 # add user to run the service
 adduser --system --group amigen
 
