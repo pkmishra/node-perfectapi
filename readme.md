@@ -11,6 +11,7 @@ This Node.js library is the reference implementation.  Others will follow in oth
  - Command-line access to an API
  - Self-hosted server exposing the API via JSONP+WebSockets
  - Native proxy access to other PerfectAPIs exposed over JSONP+WebSockets
+ - Windows and GNU/Linux installers (run your API as a service on your server)
 
 Reasons to use PerfectAPI
 -------------------------
@@ -25,10 +26,9 @@ You obtain the following with little or no additional work:
 Reasons not to use PerfectAPI
 -----------------------------
 
- - It's a little new.  You may want to wait for it to stabilize a bit.  
+ - It's still in Beta.  You may want to wait for it to stabilize a bit.  
  - If your API is primarily a simple data access layer, then you may be better off using another library that specializes in data access.  
  - You want control over what your API looks like. (PerfectAPI sacrifices some of your design freedom in order to promote a consistent API model).
- - You want a human-friendly REST interface.  The PerfectAPI JSONP+WebSocket interface is not friendly to humans.  We balance that loss by providing both command-line and native programmatic access to your API from many popular programming languages.
 
 Install
 -------
