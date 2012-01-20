@@ -15,8 +15,6 @@ function showServerDownMessageIfNothingHappens(elementIdToCheck) {
 }
 
 $(function(){
-	prettyPrint();		//see http://google-code-prettify.googlecode.com/svn/trunk/README.html
-	
 	showServerDownMessageIfNothingHappens('command');
 
 	$('#endpoint').val(_papi.endpoint);
@@ -36,15 +34,134 @@ $(function(){
 		
 		_papi.bindSelectList(select, eligibleCommands, 'name', function(command) {return command.name + ' - ' + command.synopsis});
 		if (eligibleCommands.length > 0) {
-			showCommand(eligibleCommands[0])
-			showEnvironment(eligibleCommands[0]);
-			showParameter(eligibleCommands[0]);
-			showOptions(eligibleCommands[0]);
+			refreshForCommand(eligibleCommands[0])
 		}
 		
 		var hiddenConfig = $('#hiddenConfig');
 		hiddenConfig.val(JSON.stringify(data));
 	});
+	
+	function refreshForCommand(command) {
+		showCommand(command)
+		showEnvironment(command);
+		showParameter(command);
+		showOptions(command);
+		updateExamples(command);
+	}
+	
+	function updateExamples(command, config) {
+		updateRestExample(command, config);
+		updateCurlExample(command, config);
+		updateJavascriptExample(command, config);
+		updateNodeExample(command, config);
+		prettyPrint();		//see http://google-code-prettify.googlecode.com/svn/trunk/README.html
+	}
+	
+	function updateRestExample(commandSpec, config) {
+		var href = document.location.protocol + '//' + document.location.host + commandSpec.path;
+		if (config) {
+			if (commandSpec.parameter) {
+				var paramVal = config[commandSpec.parameter.name];
+				if (paramVal.length) {
+					for (var i=0;i<paramVal.length;i++) {
+						href += '&' + commandSpec.parameter.name + '=' + encodeURI(paramVal[i]);
+					}
+				} else {
+					href += '&' + commandSpec.parameter.name + '=' + encodeURI(paramVal);
+				}
+			}
+			
+			if (config.environment) {
+				//append environment to querystring
+				for (var env in config.environment) {
+					href += '&' + env + '=' + encodeURI(config.environment[env]);
+				}
+			}
+			
+			if (config.options) {
+				//append options
+				for (var opt in config.options) {
+					href += '&' + opt + '=' + encodeURI(config.options[opt]);
+				}
+			}
+		}		
+		href = href.replace('&', '?');  //replace first ampersand
+		
+		var code = $('#restHREF');
+		code.attr('href', href);
+		code.text(href);
+	}
+	
+	function updateCurlExample(commandSpec, config) {
+		//curl -v -H "Content-Type: application/json" -d "{\"scripts\":[\"ubuntu11.10\", \"ubuntu11.10/juju\"]}" -X POST localhost:3000/apis/gen
+		var href = document.location.protocol + '//' + document.location.host + commandSpec.path;
+		var curl = '$ curl -v -H "Content-Type: application/json"';
+		if (config) {
+			curl += ' -d "' + JSON.stringify(config).replace(/"/g, '\\"') + '"'
+			
+			/*
+			if (config.environment) {
+				for (var env in config.environment) {
+					curl += ' -H "' + env + ': ' + config.environment[env] + '"';
+				}
+			}
+			*/
+		}
+		if (commandSpec.verb && (commandSpec.verb == 'POST')) {
+			curl += ' -X POST';
+		} else {
+			curl += ' -X GET';
+		}
+		curl += ' ' + href;
+		
+		var code = $('#curlCommand');
+		code.text(curl);
+	}
+	
+	function updateJavascriptExample(commandSpec, config) {
+		var href = document.location.protocol + '//' + document.location.host;
+		var endPoint = href + commandSpec.path.replace('/' + commandSpec.name, '');
+		var include = '<script src="' + endPoint + '/jquery.perfectapi.js' + '" />';
+		$('#javascriptExampleInclude').text(include);
+		
+		var code = 'var config = '
+		if (config) {
+			code += JSON.stringify(config, null, 2) + ';\n';
+		} else {
+			code += '{};\n';
+		}
+		
+		code += getApiName() + '.callApi(' + commandSpec.name + ', config, function(err, results) {\n';
+		code += '  if (err)  return;\n\n';
+		code += '  //`results` is an object with the results of the call\n';
+		code += '  ...\n';
+		code += '});';
+
+		
+		$('#javascriptExampleCode').text(code);
+	}
+	
+	function updateNodeExample(commandSpec, config) {
+		var href = document.location.protocol + '//' + document.location.host;
+		var endPoint = href + commandSpec.path.replace('/' + commandSpec.name, '');
+		var code = "var perfectapi = require('perfectapi');\n";
+		code += "perfectapi.proxy('" + endPoint + "', function(err, api) {\n";
+		if (config) {
+			code += '  var config = ' + JSON.stringify(config) + ';\n\n';
+		} else {
+			code += '  var config {};\n\n';
+		}
+		code += '  api.' + commandSpec.name + '(config, function(err, result) {\n';
+		code += '    if (err) {\n';
+		code += "      console.log('something went wrong: ' + err);\n";
+		code += '    } else {\n';
+		code += "      console.log('output = ' + JSON.stringify(result));\n";
+		code += '    }\n';
+		code += '  });\n';
+		code += '});\n';
+		
+		$('#nodeExampleCode').text(code);
+	}
 	
 	function showCommand(command) {
 		var descSpan = $('#commandDescription');
@@ -131,6 +248,17 @@ $(function(){
 		flagsList.append(liLabel);
 	}
 	
+	function getApiName() {
+		var hiddenConfig = $('#hiddenConfig');
+		var configString = hiddenConfig.val();
+		if (configString) {
+			var config = JSON.parse(configString);
+
+			return config.exports;
+		} else
+			return "apiName";
+	}
+	
 	function getCommandConfig(commandName) {
 		var hiddenConfig = $('#hiddenConfig');
 		var config = JSON.parse(hiddenConfig.val());
@@ -160,10 +288,22 @@ $(function(){
 	
 		$('.dynamicCommandAdded').remove();		//remove previously added dynamic html
 
-		showCommand(command)
-		showEnvironment(command);
-		showParameter(command);
-		showOptions(command);
+		refreshForCommand(command)
+	})
+	
+	$('#language').change(function() {
+		$('.language-example').hide();
+		
+		switch ($('#language').val()) {
+			case 'rest': $('#exampleRest').show();
+				break;
+			case 'curl': $('#exampleCurl').show();
+				break;
+			case 'javascript': $('#exampleJavascript').show();
+				break;
+			case 'node': $('#exampleNode').show();
+				break;
+		}
 	})
 	
 	$('#btnCall').click(function() {
@@ -227,8 +367,11 @@ $(function(){
 			if (!foundEnvironment) delete config.environment;
 		}
 		
-		
+		//update examples and debug config
 		$('#config').text(JSON.stringify(config, null, 4));
+		updateExamples(getCommandConfig(commandName), config);
+		
+		//run the command
 		$('.pleaseWait').show();
 		_papi.callApi(commandName, config, function(err, result) {
 			$('.pleaseWait').hide();

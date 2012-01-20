@@ -44,6 +44,7 @@
 				<a class="brand" href="#">API Test</a>
 				<ul class="nav">
 					<li class="active"><a href="#test">Test</a></li>
+					<li><a href="#examples">Code examples</a></li>
 					<li><a href="#about1">About this page</a></li>
 				</ul>
 				<!--
@@ -113,19 +114,55 @@
 					<div class="alert-message success hide fade in" id="imageSuccess">Successful API call!</div>
 					<div class="pleaseWait alert-message info hide fade in">Please wait...</div>
 					<div class="clearfix">
-            <label for="textarea">Result</label>
+            <label for="result">Result</label>
             <div class="input">
-              <textarea class="span12" id="result" name="result" rows="15"></textarea>
+              <textarea class="span12" id="result" name="result" rows="5"></textarea>
             </div>
           </div>
-					<div class="clearfix">
-            <label for="textarea">Debug - config used</label>
+					<div class="clearfix hide">
+            <label for="config">Debug - config used</label>
             <div class="input">
-              <textarea class="span12" id="config" name="config" rows="5"></textarea>
+              <textarea class="span12" id="config" name="config" rows="2"></textarea>
             </div>
           </div>
 				</fieldset>
 			</form>
+			<div class="container" id="examples">
+				<h1>Code Examples<small></small></h1>
+				<form>
+					<div class="clearfix">
+						<label for="language">Language/Tool</label>
+						<div class="input">
+							<select class="medium" name="language" id="language">
+								<option value="curl">Curl</option>
+								<option value="rest">REST</option>
+								<option value="javascript">JavaScript</option>
+								<option value="node">Node.js</option>
+							</select>
+							<span class="help-inline">Choose your language or tool</span>
+						</div>
+					</div>
+				</form>
+				<p />
+				<p>Execute a call to the API and the example below will change to match your call.</p>
+				<div class="language-example clearfix hide fade in" id="exampleRest">
+					<p>Browse to <a id="restHREF" href="" target="_blank"></a>.</p>
+					<p>The REST interface is quite forgiving in order to allow simple testing in the browser, for example you can use GET instead of POST.  In production, it is recommended you use the correct HTTP method.</p>
+				</div>
+				<div class="language-example clearfix fade in" id="exampleCurl">
+					<pre class="prettyprint" id="curlCommand"></pre>
+				</div>
+				<div class="language-example clearfix hide fade in" id="exampleJavascript">
+					<p>In your html page, ensure you have a reference to the PerfectAPI Javascript client, which is served by the service itself:</p>
+					<pre class="prettyprint" id="javascriptExampleInclude" ></pre>
+					<p>The client makes use of jQuery, so you should also include a reference to a recent version of that.  To call the API, your code should look something like this:</p>
+					<pre class="prettyprint linenums" id="javascriptExampleCode" ></pre>
+				</div>		
+				<div class="language-example clearfix hide fade in" id="exampleNode">
+					<p>You need to install the `perfectapi` component, using normal Node technique <code>npm install perfectapi</code>.  Once you have that:</p>
+					<pre class="prettyprint linenums" id="nodeExampleCode" ></pre>
+				</div>					
+			</div>
 			<p />
 			<div class="container" id="about1">
 				<h1>About this page <small></small></h1>
@@ -135,26 +172,12 @@
 			</div>
 
 
-			</div>
-						<!--
-			<div class="row">
-				<div class="span10">
-					<h2>Main content</h2>
-				</div>
-				<div class="span4">
-					<h3>Secondary content</h3>
-				</div>
-			</div>
-			-->
-			
 		</div>
-
+		
 		<footer>
 			<p>Copyright &copy; 2011 Perfect API LLC</p>
 		</footer>
-
-	</div> <!-- /container -->
-
+	</div>
 
 
   <!-- JavaScript at the bottom for fast page loading -->
