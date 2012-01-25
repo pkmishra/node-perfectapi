@@ -131,7 +131,7 @@ $(function(){
 			code += '{};\n';
 		}
 		
-		code += getApiName() + '.callApi(' + commandSpec.name + ', config, function(err, results) {\n';
+		code += getApiName() + '.callApi("' + commandSpec.name + '", config, function(err, results) {\n';
 		code += '  if (err)  return;\n\n';
 		code += '  //`results` is an object with the results of the call\n';
 		code += '  ...\n';
