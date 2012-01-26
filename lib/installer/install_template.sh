@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # substitutions that should occur before running:
 # 
@@ -8,6 +8,7 @@
 #   3001 - port number
 # 
 
+set +e
 
 # add user to run the service
 adduser --system --group amigen
