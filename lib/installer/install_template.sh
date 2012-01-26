@@ -9,7 +9,7 @@
 # 
 
 set -e
-  
+
 # add user to run the service
 adduser --system --group amigen
 
