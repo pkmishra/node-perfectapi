@@ -14,7 +14,7 @@ set -e
 adduser --system --group amigen
 
 # copy files
-cp -r node_modules/amigen/ /lib/amigen/
+cp -Rf node_modules/amigen/* /lib/amigen
 find /lib/amigen -type f -print0 | xargs -I {} -0 chmod 0664 {}
 find /lib/amigen -type d -print0 | xargs -I {} -0 chmod 0775 {}
 chmod +x /lib/amigen/bin/amigen.js
