@@ -42,7 +42,11 @@ respawn
 start on runlevel [2345]
 stop on runlevel [016]
 
-exec sudo -H -u amigen sh -c "/usr/local/bin/perfectapi-amigen server -p 3001 >> /var/log/amigen.log 2>&1" 
+script
+	EnvVarSets
+	
+    exec sudo -H -E -u amigen sh -c "/usr/local/bin/perfectapi-amigen server -p 3001 >> /var/log/amigen.log 2>&1" 
+end script
 
 pre-start script
     # Date format same as (new Date()).toISOString() for consistency
