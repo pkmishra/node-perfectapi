@@ -113,7 +113,6 @@ Assuming the service is running at http://myserver.com:3000/apis, code looks lik
 
 ```
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script src="//myserver.com:3000/socket.io/socket.io.js"></script>
 <script src="//myserver.com:3000/apis/jquery.perfectapi.js"></script>
 
 <script>
