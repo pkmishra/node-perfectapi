@@ -1,22 +1,22 @@
 {   "name":             "perfectapi"
-,   "version":          "0.0.14"
-    ,"description": "Provides various bindings to enable a package to expose itself via Internet, command-line, and be used (via proxy) from any computer language"
-,   "author":  {"name": "Steve Campbell", "email": "steve@perfectapi.com" }
-    ,"keywords": "API, perfectapi"
+	,"version":          "0.0.15"
+    ,"description": "Service API host - run a Node.js module as a service"
+	,"author":  {"name": "Steve Campbell", "email": "steve@perfectapi.com" }
+    ,"keywords": ["API","perfectapi","service","install","daemon"]
     ,"homepage": "http://www.perfectapi.com/"
     ,"bugs": {"url": "https://github.com/perfectapi/node-perfectapi/issues", "email": "node-perfectapi@perfectapi.com" }
     ,"main": "api.js"
 	,"bin": "api.js"
-,   "engines": {
-        "node" : "0.6"
+	,"engines": {
+        "node" : ">=0.6"
     }
-,   "dependencies":    {   
+	,"dependencies":    {   
 		"express":  ">=2.5.0",
 		"winston": ">=0.5.9",
 		"socket.io": ">=0.8.7",
 		"uuid-js": ">=0.7.4"
     }
-,   "repository" :
+	,"repository" :
     {
         "type" : "git",
         "url" : "git://github.com/perfectapi/node-perfectapi.git"
