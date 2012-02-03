@@ -1,34 +1,32 @@
 Package Goal
 ------------
-The goal of this package is to support:
+The goals of this package are to support:
 
  - Well-designed APIs
- - Interoperability of APIs between different OS and programming languages
- 
-This Node.js library is the reference implementation.  Others will follow in other languages.   There are the following components in this reference implementation:
+ - Simple usage of any API from any programming language
+ - Full support for running an API as a service on Linux and Windows operating systems
 
- - Native Node.js access to an API
- - Command-line access to an API
- - Self-hosted server exposing the API via JSONP+WebSockets
- - Native proxy access to other PerfectAPIs exposed over JSONP+WebSockets
- - Windows and GNU/Linux installers (run your API as a service on your server)
-
-Reasons to use PerfectAPI
+Reasons to use PerfectAPI (Feature list)
 -------------------------
-You obtain the following with little or no additional work:
 
- - expose JSONP+WebSockets interface to your API
- - expose Command-line-interface (CLI) to your API
- - Javascript binding (call your API directly from javascript)
- - gain the benefit of PerfectAPI bindings, which allow your code to be called from any of the many (FUTURE) programming languages that have PerfectAPI binding support.
- - Test page for your users to learn/experiment/test your API 
+ - You want to write a REST+JSON service in Node.js, or you want to make an existing Node.js package accessible as a service
+ - Native Node.js access to an API - obviously!  This just means that you can use it as a normal Node.js `require` module as well as a service in a separate process
+ - Node.js proxy access to other PerfectAPIs.  It's just as easy to run the API locally or as a service on another server
+ - Self-hosted server with simple comand-line - `myapp server -p 3002`
+ - Windows and Linux installers (run your API as a true service on your server) - `myapp install myappservicename`
+ - Automatic validation of required parameters
+ - Command-line access to your API
+ - JSONP interface to your API - that means you can access it using JavaScript from another domain
+ - REST interface to your API
+ - Javascript binding (call your API directly from javascript using rpc - no Ajax, just a simple async call)
+ - Awesomely amazing test page for your users to learn/experiment/test your API 
 
 Reasons not to use PerfectAPI
 -----------------------------
 
  - It's still in Beta.  You may want to wait for it to stabilize a bit.  
  - If your API is primarily a simple data access layer, then you may be better off using another library that specializes in data access.  
- - You want control over what your API looks like. (PerfectAPI sacrifices some of your design freedom in order to promote a consistent API model).
+ - You want control over what your REST API looks like. (PerfectAPI sacrifices some of your design freedom in order to promote a consistent API model).
 
 Install
 -------
@@ -75,24 +73,24 @@ module.exports = parser.parse(configPath);
 In your `package.json` file, be sure to specify the above file as a "bin", so that the app can be called from the command-line, e.g.
 
 ```	
-{   "name":             "myNodeLib"
-,   "version":          "0.0.1"
-    ,"description": "My brilliant API"
-    ,"main": "./bin/myNodeLib.js"
-	,"bin": "./bin/myNodeLib.js"
-,   "engines": {
-        "node" : ">=0.6.5"
-    }
-,   "dependencies":    {   
-        "perfectapi": ">=0.0.6"
-    }
+{ "name": "myNodeLib"
+, "version": "0.0.1"
+, "description": "My brilliant API"
+, "main": "./bin/myNodeLib.js"
+, "bin": "./bin/myNodeLib.js"
+, "engines": {
+    "node" : ">=0.6.5"
+  }
+, "dependencies": {
+	"perfectapi": ">=0.0.13"
+  }
 }
 ```
 Thats it.  
 
 Usage from another Node app
 ---------------------------
-Other node apps can use your library (e.g. `myNodeLib`) like below.  This is exactly the same as you might access any other API, except that the function signature is always the same `(config, callback)` and the callback is also always the same `function(err, result)`.  `result` is a return object with the structure defined in the configuration.
+Other node apps can use your library (e.g. `myNodeLib`).  This is exactly the same as you might access any other API, except that the function signature is always the same `(config, callback)` and the callback is also always the same `function(err, result)`.  `result` is a return object with the structure defined in the configuration.
 
 ```
 var test1=require('myNodeLib');
@@ -147,7 +145,7 @@ $ myapp --help
 
     -h, --help  output usage information
 ```
-The `server` command is added automatically (to self-host your API).
+Several commands are added automatically - `server`, `install`, `uninstall`, `config`.
 
 Focusing on just one of the commands:
 
