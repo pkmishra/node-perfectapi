@@ -62,7 +62,7 @@ $(function(){
 		if (config) {
 			if (commandSpec.parameter) {
 				var paramVal = config[commandSpec.parameter.name];
-				if (paramVal.length) {
+				if (commandSpec.parameter.type && commandSpec.parameter.type == 'multi') {
 					for (var i=0;i<paramVal.length;i++) {
 						href += '&' + commandSpec.parameter.name + '=' + encodeURI(paramVal[i]);
 					}
