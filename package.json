@@ -1,8 +1,8 @@
 {   "name":             "perfectapi"
-	,"version":          "0.0.15"
+	,"version":          "0.0.16"
     ,"description": "Service API host - run a Node.js module as a service"
 	,"author":  {"name": "Steve Campbell", "email": "steve@perfectapi.com" }
-    ,"keywords": ["API","perfectapi","service","install","daemon"]
+    ,"keywords": ["API","perfectapi","service","install","daemon","csharp","c#"]
     ,"homepage": "http://www.perfectapi.com/"
     ,"bugs": {"url": "https://github.com/perfectapi/node-perfectapi/issues", "email": "node-perfectapi@perfectapi.com" }
     ,"main": "api.js"
