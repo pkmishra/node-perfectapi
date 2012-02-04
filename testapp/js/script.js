@@ -22,6 +22,9 @@ $(function(){
 	_papi.callApi('config', function(err, data) {
 		console.log(data);
 		if (err)  return;
+    
+		var hiddenConfig = $('#hiddenConfig');
+		hiddenConfig.val(JSON.stringify(data));
 		
 		$('.apiName').text(data.exports || 'this API');
 		var select = $('#command');
@@ -36,9 +39,6 @@ $(function(){
 		if (eligibleCommands.length > 0) {
 			refreshForCommand(eligibleCommands[0])
 		}
-		
-		var hiddenConfig = $('#hiddenConfig');
-		hiddenConfig.val(JSON.stringify(data));
 	});
 	
 	function refreshForCommand(command) {
@@ -54,6 +54,7 @@ $(function(){
 		updateCurlExample(command, config);
 		updateJavascriptExample(command, config);
 		updateNodeExample(command, config);
+    updateCSharpExample(command, config);
 		prettyPrint();		//see http://google-code-prettify.googlecode.com/svn/trunk/README.html
 	}
 	
@@ -98,14 +99,6 @@ $(function(){
 		var curl = '$ curl -v -H "Content-Type: application/json"';
 		if (config) {
 			curl += ' -d "' + JSON.stringify(config).replace(/"/g, '\\"') + '"'
-			
-			/*
-			if (config.environment) {
-				for (var env in config.environment) {
-					curl += ' -H "' + env + ': ' + config.environment[env] + '"';
-				}
-			}
-			*/
 		}
 		if (commandSpec.verb && (commandSpec.verb == 'POST')) {
 			curl += ' -X POST';
@@ -118,6 +111,66 @@ $(function(){
 		code.text(curl);
 	}
 	
+  function updateCSharpExample(commandSpec, config) {
+    var href = document.location.protocol + '//' + document.location.host;
+		var endPoint = href + commandSpec.path.replace('/' + commandSpec.name, '');
+    var apiName = getApiName();
+    endPoint += '/' + apiName + '.cs';
+    
+    $('#csharpdownload').text(endPoint);
+    $('#csharpdownload').attr('href', endPoint);
+    
+    var code = 'using PerfectAPI.Client;\n\n';
+    code += 'public static void Main(string[] args) {\n';
+    code += '  var ' + apiName + ' = new ' + capitalize(apiName) + '();\n\n';
+    code += '  var config = new ' + capitalize(apiName) + '.' + capitalize(commandSpec.name) + 'Config();\n';
+    if (config) {
+			if (commandSpec.parameter) {
+				var paramVal = config[commandSpec.parameter.name];
+        code += '  config.' + capitalize(commandSpec.parameter.name) + ' = ';
+				if (commandSpec.parameter.type && commandSpec.parameter.type == 'multi') {
+          code += ' new string[] {';
+          var sep = "";
+					for (var i=0;i<paramVal.length;i++) {
+						code += sep + '@"' + paramVal[i] + '"';
+            sep = ', ';
+					}
+          code += '}\n';
+				} else {
+          code += '@"' + paramVal + '"\n';
+				}
+			}
+			
+			if (config.environment) {
+				//append environment to querystring
+				for (var env in config.environment) {
+          code += '  config.Environment.' + capitalize(env) + ' = @"' + config.environment[env] + '";\n';
+				}
+			}
+			
+			if (config.options) {
+				//append options
+				for (var opt in config.options) {
+          if (config.options[opt] === true || config.options[opt] === false) {
+            code += '  config.Options.' + capitalize(opt) + ' = ' + config.options[opt] + ';\n';
+          } else {
+            code += '  config.Options.' + capitalize(opt) + ' = @"' + config.options[opt] + '";\n';
+          }
+				}
+			}    
+    }  
+    code += '\n  var result = ' + apiName + '.' + capitalize(commandSpec.name) + '(config);\n';
+    code += '  Console.WriteLine(result.RawResult);\n';
+    code += '}';
+    
+    $('#csharpExampleCode').text(code);
+  }
+  
+  function capitalize(string)
+  {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  
 	function updateJavascriptExample(commandSpec, config) {
 		var href = document.location.protocol + '//' + document.location.host;
 		var endPoint = href + commandSpec.path.replace('/' + commandSpec.name, '');
@@ -303,6 +356,8 @@ $(function(){
 				break;
 			case 'node': $('#exampleNode').show();
 				break;
+      case 'csharp': $('#exampleCSharp').show();
+        break;
 		}
 	})
 	

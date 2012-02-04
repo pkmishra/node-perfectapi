@@ -10,7 +10,7 @@ Reasons to use PerfectAPI (Feature list)
 -------------------------
 
  - You want to write a REST+JSON service in Node.js, or you want to make an existing Node.js package accessible as a service
- - Native Node.js access to an API - obviously!  This just means that you can use it as a normal Node.js `require` module as well as a service in a separate process
+ - Native Node.js access to an API - obviously!  This just means that you can use it as a normal Node.js `require` module or as a service in a separate process
  - Node.js proxy access to other PerfectAPIs.  It's just as easy to run the API locally or as a service on another server
  - Self-hosted server with simple comand-line - `myapp server -p 3002`
  - Windows and Linux installers (run your API as a true service on your server) - `myapp install myappservicename`
@@ -18,13 +18,13 @@ Reasons to use PerfectAPI (Feature list)
  - Command-line access to your API
  - JSONP interface to your API - that means you can access it using JavaScript from another domain
  - REST interface to your API
- - Javascript binding (call your API directly from javascript using rpc - no Ajax, just a simple async call)
+ - Native .NET client to your API - access from .NET without dealing with REST, JSON, WebRequest etc.
+ - Javascript client (call your API directly from javascript using rpc - no Ajax, just a simple async call)
  - Awesomely amazing test page for your users to learn/experiment/test your API 
 
 Reasons not to use PerfectAPI
 -----------------------------
 
- - It's still in Beta.  You may want to wait for it to stabilize a bit.  
  - If your API is primarily a simple data access layer, then you may be better off using another library that specializes in data access.  
  - You want control over what your REST API looks like. (PerfectAPI sacrifices some of your design freedom in order to promote a consistent API model).
 
@@ -184,3 +184,47 @@ perfectapi.proxy('http://myserver.com:3000/apis', function(err, test1) {
 	
 });
 ```
+
+Usage from C# (.NET Framework 4.0 or higher)
+-------------
+When running as a service, the service endpoint exposes a C# client at `http://myserver.com/myapi/myapi.cs`.  You should downloaded that file (once) and incorporate it into your C# project.  You will need the following references in your project, and you will need to target .NET 4 or later:
+
+ - System
+ - System.Core
+ - System.Runtime.Serialization
+ - System.Web
+ - System.Xml
+ - System.Xml.Linq
+ - Microsoft.CSharp
+ 
+The following is an example of usage:
+
+```
+using System;
+using PerfectAPI.Client;
+
+namespace example
+{
+	class Program
+	{
+		public static void Main(string[] args)
+		{
+			var amigen = new Amigen();
+			
+			var config = new Amigen.GenConfig();
+			config.Scripts = new string[] {@"ubuntu11.10\nodejs-stable"};
+			config.Options.Root = @"E:\Code\ami-generator\scripts\";
+			var result = amigen.Gen(config);
+			
+			Console.WriteLine(result.RawResult);
+			Console.WriteLine(result.ParsedResult.ami);
+			Console.WriteLine(result.ParsedResult.region);
+			
+			Console.Write("Press any key to continue . . . ");
+			Console.ReadKey(true);
+		}
+	}
+}
+```
+
+In the example above, the service name is `amigen` and the command being executed is `gen`.  The command accepts a parameter named `scripts` and has an option named `root`.  The results are available as raw JSON (`RawResult`) or as parsed JSON (`ParsedResult`).
