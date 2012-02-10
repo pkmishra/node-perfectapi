@@ -15,7 +15,8 @@
 		"winston": ">=0.5.9",
 		"socket.io": ">=0.8.7",
 		"uuid-js": ">=0.7.4",
-		"ejs": ">=0.6.1"
+		"ejs": ">=0.6.1",
+		"request": ">=2.9"
     }
 	,"repository" :
     {
