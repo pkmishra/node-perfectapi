@@ -8,5 +8,6 @@
 stop amigen
 rm /usr/local/bin/perfectapi-amigen
 rm /etc/init/amigen.conf
+rm -fr /lib/amigen
 
 # and that, my friends is the laziest uninstall you'll ever see

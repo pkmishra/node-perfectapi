@@ -1,16 +1,29 @@
 /* 
  * Usage: 
  * 
- * var perfectapi = require('perfectapi');
+ * var perfectapi = require('perfectapi');  
+ * var path = require('path');
+ * 
+ * var configPath = path.resolve(__dirname, 'perfectapi.json');
  * var parser = new perfectapi.Parser();
  * 
- * parser.parse(pathToJsonConfig);
+ * //handle the commands
  * parser.on("mycommand", function(config, callback) {
- * 	 //do mycommand code, putting results into "result" object
- *   
+ *   //do mycommand code, putting results into "result" object
+ * 
  *   //after done
  *   callback(err, result);
  * });
+ * 
+ * parser.on("anothercommand", function(config, callback) {
+ *   //do anothercommand code, putting results into "result" object
+ * 
+ *   //after done
+ *   callback(err, result);
+ * });
+ * 
+ * //expose the api
+ * module.exports = parser.parse(configPath);
 */
 
 var cli=require("./lib/cligen.js");

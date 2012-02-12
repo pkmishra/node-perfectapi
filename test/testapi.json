@@ -1,0 +1,66 @@
+{	"exports": "testapi",
+	"signature": [
+		{
+			"name": "throw",
+			"synopsis": "throws an error"
+		},
+		{
+			"name": "simpleget",
+			"synopsis": "returns a simple result"
+		},
+		{
+			"name": "getwithoptions",
+			"synopsis": "accepts a parameter, options and environment",
+			"parameter": {"name": "param1", "required":"true"},
+			"options": 
+				[{"option": "option1", "required":"true"},
+				 {"flag": "flag1", "required":"true"}
+				],
+			"environment": [
+				{"parameter": "ENV_1", "required":"true"}
+			]
+		},
+		{
+			"name": "postwithoptions",
+			"verb": "POST",
+			"synopsis": "accepts a parameter, options and environment",
+			"parameter": {"name": "param1", "required":"true"},
+			"options": 
+				[{"option": "option1", "required":"true"},
+				 {"flag": "flag1", "required":"true"}
+				],
+			"environment": [
+				{"parameter": "ENV_1", "required":"true"}
+			]
+		},
+		{ 
+			"name": "mycommand",
+			"synopsis": "Generates a new Amazon EC2 image using the supplied scripts",
+			"description": "Using a baseAMI and a set of scripts, builds up (or finds existing) AMI image that matches the criteria.",
+			"verb": "POST",
+			"parameter": {"name": "scripts", "required":"true", "type":"multi"},
+			"options": 
+				[{"option": "root", "long":"root", "short":"r", "required":"false", "description":"specify the root folder where scripts can be found"},
+				 {"option": "ami", "required":"false", "long":"ami", "short":"a", "description":"the AMI name that will form the basis of the new images"},
+				 {"option": "region", "default":"us-east-1", "long":"region", "short":"e", "description":"The amazon region in which to create the image"},
+				 {"flag": "bit32", "default":"false", "long":"32", "short":"3", "description":"if set, the resulting AMI will be a 32 bit image.  Ignored if a specific base AMI is specified (--ami)."},
+				 {"flag": "bit64", "default":"true", "long":"64", "short":"6", "description":"if set, the resulting AMI will be a 64 bit image.  Ignored if a specific base AMI is specified (--ami)."},
+				 {"flag": "publish", "long":"publish", "short":"p", "default":"false", "description":"if set, the resulting AMI(s) will be made public"}],
+			"returns": 
+				[{"name":"ami", "description":"Amazon AMI Image Id, e.g. ami-bf62a9d6"},
+				 {"name":"region", "description":"Amazon AWS region in which the ami can be found"}
+				]
+		},
+		{
+			"name": "anothercommand",
+			"synopsis": "Lists available scripts for use in gen",
+			"description": "Finds the available scripts, which are stored in subfolders of the root (see root option)",
+			"verb": "GET",
+			"options": 
+				[{"option": "root", "required":"false", "long":"root", "short":"r", "description":"specify the root folder where scripts can be found"}],
+			"returns": 
+				[{"name":"scripts", "type":"list", "description":"List of scripts relative to the root path"} ]
+		}
+	], 
+	"path": "api/test"
+}
