@@ -24,19 +24,6 @@ parser.on('postwithoptions', function(config, callback) {
   callback(null, result);
 })
 
-parser.on("mycommand", function(config, callback) {
-  //do mycommand code, putting results into "result" object
-
-  //after done
-  callback(err, result);
-});
-
-parser.on("anothercommand", function(config, callback) {
-  //do anothercommand code, putting results into "result" object
-
-  //after done
-  callback(err, result);
-});
 
 //expose the api
 module.exports = parser.parse(configPath);
