@@ -232,7 +232,9 @@ $(function(){
 			var env = command.environment[i];
 			var lbl = '<label for="' + env.parameter + '">' + env.parameter.replace(/_/g, ' ') + '</label>';
 			var div = '<div class="input">';
-			div += '<input type="text" class="large" name="' + env.parameter + '" id="' + env.parameter + '"></input>'
+      var editable = (env.hasValue && !env.allowOverride) ? ' uneditable-input' : '';
+      var editableMessage = (env.hasValue) ? 'Value set on server' : '';
+			div += '<input type="text" class="large' + editable + '" name="' + env.parameter + '" id="' + env.parameter + '" placeholder="' + editableMessage + '"></input>'
 			if (env.description) div += '<span class="help-inline">' + env.description + '</span>';
 			div += '</div>';
 			

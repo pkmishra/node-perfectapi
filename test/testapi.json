@@ -23,7 +23,7 @@
 				 {"flag": "flag1"}
 				],
 			"environment": [
-				{"parameter": "ENV_1", "required":true}
+				{"parameter": "ENV_1", "required":true, "allowOverride":true}
 			]
 		},
 		{
