@@ -9,12 +9,18 @@
 			"synopsis": "returns a simple result"
 		},
 		{
+			"name": "defaultoption",
+			"synopsis": "has a required option with a default value",
+			"options": 
+				[{"option": "option1", "required":true, "default":"bla"} ]
+		},
+		{
 			"name": "getwithoptions",
 			"synopsis": "accepts a parameter, options and environment",
 			"parameter": {"name": "param1", "required":true},
 			"options": 
 				[{"option": "option1", "required":true},
-				 {"flag": "flag1", "required":true}
+				 {"flag": "flag1"}
 				],
 			"environment": [
 				{"parameter": "ENV_1", "required":true}
@@ -27,7 +33,7 @@
 			"parameter": {"name": "param1", "required":true},
 			"options": 
 				[{"option": "option1", "required":true},
-				 {"flag": "flag1", "required":true}
+				 {"flag": "flag1"}
 				],
 			"environment": [
 				{"parameter": "ENV_1", "required":true}

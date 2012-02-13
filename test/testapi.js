@@ -23,7 +23,11 @@ parser.on('postwithoptions', function(config, callback) {
   var result = config;
   callback(null, result);
 })
-
+parser.on('defaultoption', function(config, callback) {
+  //echo back config
+  var result = config;
+  callback(null, result);
+})
 
 //expose the api
 module.exports = parser.parse(configPath);
