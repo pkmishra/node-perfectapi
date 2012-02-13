@@ -2,12 +2,14 @@
 
 # substitutions that should occur before running:
 # 
-#   amigen - name of service
+#   876uyghjhsadadsf - name of service
 # 
 
-stop amigen
-rm /usr/local/bin/perfectapi-amigen
-rm /etc/init/amigen.conf
-rm -fr /lib/amigen
+stop 876uyghjhsadadsf
+rm /usr/local/bin/perfectapi-876uyghjhsadadsf
+rm /etc/init/876uyghjhsadadsf.conf
+rm -fr /lib/876uyghjhsadadsf
+deluser --remove-home --system 876uyghjhsadadsf
+deluser --system --group 876uyghjhsadadsf
 
 # and that, my friends is the laziest uninstall you'll ever see
