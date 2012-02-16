@@ -2,31 +2,31 @@ Package Goal
 ------------
 The goals of this package are to support:
 
- - Well-designed APIs
- - Simple usage of any API from any programming language
+ - Well-designed APIs (easy to use, scales well, easy to extend, etc)
+ - Simple usage of any API from any programming language.  (Its pretty easy already, but we make it even easier)
  - Full support for running an API as a service on Linux and Windows operating systems
+ - Simplicity of developement for both API authors and consumers
+ 
 
-Reasons to use PerfectAPI (Feature list)
+Reasons to use PerfectAPI (Current Feature list)
 -------------------------
 
- - You want to write a REST+JSON service in Node.js, or you want to make an existing Node.js package accessible as a service
- - Native Node.js access to an API - obviously!  This just means that you can use it as a normal Node.js `require` module or as a service in a separate process
- - Node.js proxy access to other PerfectAPIs.  It's just as easy to run the API locally or as a service on another server
- - Self-hosted server with simple comand-line - `myapp server -p 3002`
+ - You want to expose an API using Node.js, or you want to make an existing Node.js module accessible as a remote service API
+ - Easily create a self-hosted server with command-line - `myapp server -p 3002`
+ - Support for easy configuration
+ - Awesomely amazing test page for your users to learn/experiment/test your API, e.g. [amigen api test page](http://services.perfectapi.com:3000/amigen/testapp/)
  - Windows and Linux installers (run your API as a true service on your server) - `myapp install myappservicename`
  - Automatic validation of required parameters
- - Command-line access to your API
- - JSONP interface to your API - that means you can access it using JavaScript from another domain
+ - Local command-line access to your API
+ - Built-in JSONP interface to your API - that means you can access it using JavaScript from another domain
  - REST interface to your API
  - Native .NET client to your API - access from .NET without dealing with REST, JSON, WebRequest etc.
- - Javascript client (call your API directly from javascript using rpc - no Ajax, just a simple async call)
- - Awesomely amazing test page for your users to learn/experiment/test your API 
+ - Enables best practices like sending secure tokens (e.g. OAUTH tokens) via headers rather than the HTTP body
+ 
+Is it Perfect?
+--------------
 
-Reasons not to use PerfectAPI
------------------------------
-
- - If your API is primarily a simple data access layer, then you may be better off using another library that specializes in data access.  
- - You want control over what your REST API looks like. (PerfectAPI sacrifices some of your design freedom in order to promote a consistent API model).
+No.  See the [FAQ](https://github.com/perfectapi/node-perfectapi/wiki/FAQ)
 
 Install
 -------
