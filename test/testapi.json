@@ -15,6 +15,16 @@
 				[{"option": "option1", "required":true, "default":"bla"} ]
 		},
 		{
+			"name": "multipleParams",
+			"synopsis": "has multiple parameters",
+			"parameters": [ 
+				{"name": "param1", "required":true, "description":"parameter 1"},
+				{"name": "param2", "required":true, "description":"parameter 2"}
+			],
+			"options": 
+				[{"option": "option1", "required":true, "default":"bla"} ]
+		},
+		{
 			"name": "getwithoptions",
 			"synopsis": "accepts a parameter, options and environment",
 			"parameter": {"name": "param1", "required":true},
