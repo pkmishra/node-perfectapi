@@ -58,5 +58,33 @@ describe('Node Native API', function() {
     })
   })
   
-
+  it('should get multiple parameters when sent as GET', function(done) { 
+    var config = {
+      param1: 'parameter 1',
+      param2: 'parameter 2'
+    };
+    tester.multipleParams(config, function(err, result) {
+      if (err) throw err;
+      
+      result.param1.should.equal(config.param1);
+      result.param2.should.equal(config.param2);
+      
+      done();
+    })
+  })
+  it('should get multiple parameters when sent as POST', function(done) { 
+    var config = {
+      param1: 'parameter 1',
+      param2: 'parameter 2'
+    };
+    tester.multipleParamsPosted(config, function(err, result) {
+      if (err) throw err;
+      
+      result.param1.should.equal(config.param1);
+      result.param2.should.equal(config.param2);
+      
+      done();
+    })
+  })
+  
 })

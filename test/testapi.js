@@ -33,6 +33,11 @@ parser.on('multipleParams', function(config, callback) {
   var result = config;
   callback(null, result);
 })
+parser.on('multipleParamsPosted', function(config, callback) {
+  //echo back config
+  var result = config;
+  callback(null, result);
+})
 
 //expose the api
 module.exports = parser.parse(configPath);

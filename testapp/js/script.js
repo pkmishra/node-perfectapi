@@ -44,7 +44,7 @@ $(function(){
 	function refreshForCommand(command) {
 		showCommand(command)
 		showEnvironment(command);
-		showParameter(command);
+		showParameters(command);
 		showOptions(command);
 		updateExamples(command);
 	}
@@ -61,14 +61,16 @@ $(function(){
 	function updateRestExample(commandSpec, config) {
 		var href = document.location.protocol + '//' + document.location.host + commandSpec.path;
 		if (config) {
-			if (commandSpec.parameter) {
-				var paramVal = config[commandSpec.parameter.name];
-				if (commandSpec.parameter.type && commandSpec.parameter.type == 'multi') {
+			for (var i=0;i<commandSpec.parameters.length;i++) {
+        var param = commandSpec.parameters[i];
+        
+				var paramVal = config[param.name];
+				if (param.type && param.type == 'multi') {
 					for (var i=0;i<paramVal.length;i++) {
-						href += '&' + commandSpec.parameter.name + '=' + encodeURI(paramVal[i]);
+						href += '&' + param.name + '=' + encodeURI(paramVal[i]);
 					}
 				} else {
-					href += '&' + commandSpec.parameter.name + '=' + encodeURI(paramVal);
+					href += '&' + param.name + '=' + encodeURI(paramVal);
 				}
 			}
 			
@@ -125,10 +127,12 @@ $(function(){
     code += '  var ' + apiName + ' = new ' + capitalize(apiName) + '();\n\n';
     code += '  var config = new ' + capitalize(apiName) + '.' + capitalize(commandSpec.name) + 'Config();\n';
     if (config) {
-			if (commandSpec.parameter) {
-				var paramVal = config[commandSpec.parameter.name];
-        code += '  config.' + capitalize(commandSpec.parameter.name) + ' = ';
-				if (commandSpec.parameter.type && commandSpec.parameter.type == 'multi') {
+			for (var i=0;i<commandSpec.parameters.length;i++) {
+        var param = commandSpec.parameters[i];
+        
+				var paramVal = config[param.name];
+        code += '  config.' + capitalize(param.name) + ' = ';
+				if (param.type && param.type == 'multi') {
           code += ' new string[] {';
           var sep = "";
 					for (var i=0;i<paramVal.length;i++) {
@@ -243,32 +247,44 @@ $(function(){
 		}		
 	}
 	
-	function showParameter(command) {
+	function showParameters(commandSpec) {
 		var paramDiv = $('#parameterDiv');
-		if (!command.parameter) {
+		if (!commandSpec.parameters || commandSpec.parameters.length == 0) {
 			paramDiv.hide();
 			return;
 		}
 		
 		paramDiv.show();
-		var param = command.parameter;
-		$('#parameterLabel').text(param.name);
-		var desc = param.description || '';
-		if (param.required && (param.required == true)) desc = '(required) ' + desc;
-		if (param.type && (param.type == 'multi')) desc = desc + ' - supports multiple values (separate with commas)';
-		$('#parameterHelp').text(desc);
+    for(var i=0;i<commandSpec.parameters.length;i++) {
+      var param = commandSpec.parameters[i];
+      
+      showParameter(param, paramDiv);
+    }
 	}
+  
+  function showParameter(param, paramDiv) {
+		var lbl = '<label for="' + param.name + '">' + param.name + '</label>';
+		var div = '<div class="input">';
+		div += '<input type="text" class="medium" name="' + param.name + '" id="' + param.name + '"></input>';
+		var desc = param.description || '';
+		var required = param.required && (param.required == true) ;
+		div += '<span class="help-inline">' + (required ? '(required) - ' : '') + desc + '</span>';
+		div += '</div>';
+		
+		var clearFix = '<div class="clearfix dynamicCommandAdded">' + lbl + div + '</div>';
+		paramDiv.before(clearFix);  
+  }
 	
-	function showOptions(command) {
+	function showOptions(commandSpec) {
 		var optionsDiv = $('#optionsDiv');
 		optionsDiv.hide();  //just used to locate an area
 		var flagsDiv = $('#flagsDiv'); 
 		flagsDiv.hide();    //default to hidden, may show later
 		
-		if (!command.options) return;
+		if (!commandSpec.options) return;
 		
-		for (var i=0;i<command.options.length;i++) {
-			var opt = command.options[i];
+		for (var i=0;i<commandSpec.options.length;i++) {
+			var opt = commandSpec.options[i];
 			if (opt.option) 
 				showOption(opt, optionsDiv)
 			else 
@@ -287,7 +303,7 @@ $(function(){
 		div += '</div>';
 		
 		var clearFix = '<div class="clearfix dynamicCommandAdded">' + lbl + div + '</div>';
-		optDiv.after(clearFix);
+		optDiv.before(clearFix);
 	}
 
 	function showFlag(flag, flagsDiv) {
@@ -373,12 +389,15 @@ $(function(){
 		
 		var config = {};
 		if (cmdConfig.parameter) {
-			var val =  $('#parameter').val();
-			if (cmdConfig.parameter.type === 'multi') {
-				val = (val === '' ? [] : val.split(','));
-				config[cmdConfig.parameter.name] = val;
-			} else
-				config[cmdConfig.parameter.name] = val;
+      for (var i=0;i<cmdConfig.parameters.length;i++) {
+        var param = cmdConfig.parameters[i];
+        var val =  $('#' + param.name).val();
+        if (param.type === 'multi') {
+          val = (val === '' ? [] : val.split(','));
+          config[param.name] = val;
+        } else
+          config[param.name] = val;
+      }
 		}
 		
 		if (cmdConfig.options) {

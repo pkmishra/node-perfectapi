@@ -87,6 +87,43 @@ describe('Node proxy', function() {
     });
   })
   
+  it('should get multiple parameters when sent as GET', function(done) { 
+    perfectapi.proxy('http://localhost:3001/api/test', function(err, tester) {
+      if (err) throw err;
+      
+      var config = {
+        param1: 'parameter 1',
+        param2: 'parameter 2'
+      };
+      tester.multipleParams(config, function(err, result) {
+        if (err) throw err;
+        
+        result.param1.should.equal(config.param1);
+        result.param2.should.equal(config.param2);
+        
+        done();
+      })
+    });
+  })
+  it('should get multiple parameters when sent as POST', function(done) { 
+    perfectapi.proxy('http://localhost:3001/api/test', function(err, tester) {
+      if (err) throw err;
+      
+      var config = {
+        param1: 'parameter 1',
+        param2: 'parameter 2'
+      };
+      tester.multipleParamsPosted(config, function(err, result) {
+        if (err) throw err;
+        
+        result.param1.should.equal(config.param1);
+        result.param2.should.equal(config.param2);
+        
+        done();
+      })
+    });
+  })
+  
   after(function() {
     var config = {command: 'stop' };
     testapi.server(config, function() {
