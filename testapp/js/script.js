@@ -70,7 +70,7 @@ $(function(){
 						href += '&' + param.name + '=' + encodeURI(paramVal[i]);
 					}
 				} else {
-					href += '&' + param.name + '=' + encodeURI(paramVal);
+					href += '/' + param.name + '/' + encodeURI(paramVal);
 				}
 			}
 			
