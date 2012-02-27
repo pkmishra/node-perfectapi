@@ -388,17 +388,15 @@ $(function(){
 		var cmdConfig = getCommandConfig(commandName);
 		
 		var config = {};
-		if (cmdConfig.parameter) {
-      for (var i=0;i<cmdConfig.parameters.length;i++) {
-        var param = cmdConfig.parameters[i];
-        var val =  $('#' + param.name).val();
-        if (param.type === 'multi') {
-          val = (val === '' ? [] : val.split(','));
-          config[param.name] = val;
-        } else
-          config[param.name] = val;
-      }
-		}
+    for (var i=0;i<cmdConfig.parameters.length;i++) {
+      var param = cmdConfig.parameters[i];
+      var val =  $('#' + param.name).val();
+      if (param.type === 'multi') {
+        val = (val === '' ? [] : val.split(','));
+        config[param.name] = val;
+      } else
+        config[param.name] = val;
+    }
 		
 		if (cmdConfig.options) {
 			config.options = {};
