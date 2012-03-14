@@ -19,9 +19,9 @@ Reasons to use PerfectAPI (Current Feature list)
  - Automatic validation of required parameters
  - Local command-line access to your API
  - Built-in JSONP interface to your API - that means you can access it using JavaScript from another domain
- - REST interface to your API
+ - REST-like interface to your API
  - Native .NET client to your API - access from .NET without dealing with REST, JSON, WebRequest etc.
- - Enables best practices like sending secure tokens (e.g. OAUTH tokens) via headers rather than the HTTP body
+ - Built-in support for max-age and etag server caching - lowers your costs by doing less work
  
 Is it Perfect?
 --------------
