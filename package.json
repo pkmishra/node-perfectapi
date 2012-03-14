@@ -1,5 +1,5 @@
 {   "name":             "perfectapi"
-	,"version":          "0.0.22"
+	,"version":          "0.0.23"
     ,"description": "Service API host - run a Node.js module as a service"
 	,"author":  {"name": "Steve Campbell", "email": "steve@perfectapi.com" }
     ,"keywords": ["API","perfectapi","service","install","daemon","csharp","c#"]
