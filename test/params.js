@@ -18,6 +18,7 @@ describe('Passing of parameters', function() {
       var result = JSON.parse(res.body);
       result.should.have.property('param1', 'param1value');
       result.should.have.property('param2', 'param2value');
+      result.options.should.have.property('option1', 'bla');
       
       done();
     })
@@ -30,6 +31,7 @@ describe('Passing of parameters', function() {
       var result = JSON.parse(res.body);
       result.should.have.property('param1', 'param1value');
       result.should.have.property('param2', 'param2value');
+      result.options.should.have.property('option1', 'bla');
       
       done();
     })
@@ -44,6 +46,7 @@ describe('Passing of parameters', function() {
       var result = JSON.parse(res.body);
       result.should.have.property('param1', 'param1value');
       result.should.have.property('param2', 'param2value');
+      result.options.should.have.property('option1', 'bla');
       
       done();
     })
@@ -57,6 +60,7 @@ describe('Passing of parameters', function() {
       var result = JSON.parse(res.body);
       result.should.have.property('param1', 'param1value');
       result.should.have.property('param2', 'param2value');
+      result.options.should.have.property('option1', 'bla');
       
       done();
     })
@@ -70,6 +74,7 @@ describe('Passing of parameters', function() {
       var result = res.body;
       result.should.have.property('param1', 'param1value');
       result.should.have.property('param2', 'param2value');
+      result.options.should.have.property('option1', 'bla');
       
       done();
     })
