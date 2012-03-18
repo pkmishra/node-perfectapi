@@ -7,7 +7,7 @@ var config_etag = '';
 describe('Basic caching', function() {
   
   before(function() {
-    var config = {options: {port: 3001} };
+    var config = {options: {port: 3001, webworker: false} };
     testapi.server(config);
   })
 

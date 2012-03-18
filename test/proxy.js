@@ -5,7 +5,7 @@ var util = require('util');
 describe('Node proxy', function() {
   
   before(function() {
-    var config = {options: {port: 3001} };
+    var config = {options: {port: 3001, webworker: false} };
     testapi.server(config);
   })
 

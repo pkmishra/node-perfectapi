@@ -6,7 +6,7 @@ var request = require('request');
 describe('Passing of parameters', function() {
   
   before(function() {
-    var config = {options: {port: 3001} };
+    var config = {options: {port: 3001, webworker: false} };
     testapi.server(config);
   })
 
@@ -44,6 +44,7 @@ describe('Passing of parameters', function() {
       res.statusCode.should.equal(200);
       
       var result = JSON.parse(res.body);
+      result.should.not.have.property('err');
       result.should.have.property('param1', 'param1value');
       result.should.have.property('param2', 'param2value');
       result.options.should.have.property('option1', 'bla');
@@ -75,6 +76,18 @@ describe('Passing of parameters', function() {
       result.should.have.property('param1', 'param1value');
       result.should.have.property('param2', 'param2value');
       result.options.should.have.property('option1', 'bla');
+      
+      done();
+    })
+  })
+  
+  it('should not remember config from last time', function(done) {
+    var config = {param1: "param1value"};
+    request({method: 'POST', url: 'http://localhost:3001/api/test/multipleParamsPosted', json: config}, function (error, res, body) {
+      res.statusCode.should.equal(200);
+      
+      var result = res.body;
+      result.should.have.property('err');
       
       done();
     })
