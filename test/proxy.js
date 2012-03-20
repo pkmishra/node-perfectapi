@@ -3,9 +3,10 @@ var testapi = require('./testapi.js');
 var util = require('util');
 
 describe('Node proxy', function() {
+  var webworker = false;
   
   before(function() {
-    var config = {options: {port: 3001, webworker: false} };
+    var config = {options: {port: 3001, webworker: webworker} };
     testapi.server(config);
   })
 
@@ -125,7 +126,7 @@ describe('Node proxy', function() {
   })
   
   after(function() {
-    var config = {command: 'stop' };
+    var config = {command: 'stop', options: {webworker:webworker} };
     testapi.server(config, function() {
       //should stop the server
     })  

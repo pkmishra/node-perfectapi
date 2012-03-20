@@ -13,6 +13,12 @@ parser.on('throw', function(config, callback) {
 parser.on('simpleget', function(config, callback) {
   callback(null, 'This is a simple result');
 })
+parser.on('randomdelay', function(config, callback) {
+  var randomdelay=Math.ceil(Math.random()*10);
+  setTimeout(function() {
+    callback(null, 'This is a simple result');
+  }, randomdelay);
+})
 parser.on('getwithoptions', function(config, callback) {
   //echo back config
   var result = config;

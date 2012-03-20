@@ -5,9 +5,10 @@ var request = require('request');
 var config_etag = '';
 
 describe('Basic caching', function() {
+  var webworker = false;
   
   before(function() {
-    var config = {options: {port: 3001, webworker: false} };
+    var config = {options: {port: 3001, webworker: webworker} };
     testapi.server(config);
   })
 
@@ -35,7 +36,7 @@ describe('Basic caching', function() {
   
   
   after(function() {
-    var config = {command: 'stop' };
+    var config = {command: 'stop', options: {webworker:webworker} };
     testapi.server(config, function() {
       //should stop the server
     })  

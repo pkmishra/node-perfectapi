@@ -1,0 +1,25 @@
+{	"exports": "fib",
+	"signature": [
+		{
+			"name": "fib",
+			"synopsis": "runs a fibonacci sequence",
+			"verb": "POST",
+			"parameters": [ 
+				{"name": "number", "required":true, "description":"which fibonacci to calculate"}
+			]
+		},
+		{
+			"name": "randomfib",
+			"synopsis": "runs a random fibonacci sequence, 1 to 30"
+		},
+		{
+			"name": "randomfib2",
+			"synopsis": "runs a random fibonacci sequence, 1 to 30, using a long-lived worker process"
+		},
+		{
+			"name": "randomfib3",
+			"synopsis": "runs a random fibonacci sequence, 1 to 30, using multiple long-lived worker processes"
+		}
+	], 
+	"path": "fib"
+}

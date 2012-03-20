@@ -9,6 +9,10 @@
 			"synopsis": "returns a simple result"
 		},
 		{
+			"name": "randomdelay",
+			"synopsis": "returns a simple result after a random delay"
+		},
+		{
 			"name": "defaultoption",
 			"synopsis": "has a required option with a default value",
 			"options": 
