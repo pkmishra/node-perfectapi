@@ -1,0 +1,287 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Node-perfectapi by perfectapi</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Node-perfectapi</h1>
+        <p>Easier service APIs using Node.js</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/perfectapi/node-perfectapi" class="button fork"><strong>Fork On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/perfectapi/node-perfectapi/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/perfectapi/node-perfectapi/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h2>Package Goals</h2>
+
+<p>The goals of this package are to support:</p>
+
+<ul>
+<li>Well-designed service APIs (easy to use, scales well, easy to extend, etc)</li>
+<li>Simple usage of any API from any programming language.  (Its pretty easy already, but we make it even easier)</li>
+<li>Full support for running an API as a service on Linux and Windows operating systems</li>
+<li>Simplicity of developement for both API authors and consumers</li>
+</ul><h2>Reasons to use PerfectAPI (Current Feature list)</h2>
+
+<ul>
+<li>You want to expose an API using Node.js, or you want to make an existing Node.js module accessible as a remote service API</li>
+<li>Easily create a self-hosted server with command-line - <code>myapp server -p 3002</code>
+</li>
+<li>Support for easy configuration</li>
+<li>Awesomely amazing test page for your users to learn/experiment/test your API, e.g. <a href="http://services.perfectapi.com:3000/amigen/testapp/">amigen api test page</a>
+</li>
+<li>Windows and Linux installers (run your API as a true service on your server) - <code>myapp install myappservicename</code>
+</li>
+<li>Automatic validation of required parameters</li>
+<li>Local command-line access to your API</li>
+<li>Built-in JSONP interface to your API - you can access it (easily) using JavaScript from another domain</li>
+<li>REST-like GET/POST interface to your API</li>
+<li>Native .NET client to your API - access from .NET without dealing with REST, JSON, WebRequest etc.</li>
+<li>Built-in support for max-age and etag server caching - lowers your costs by doing less work</li>
+</ul><h2>Is it Perfect?</h2>
+
+<p>No.  See the <a href="https://github.com/perfectapi/node-perfectapi/wiki/FAQ">FAQ</a></p>
+
+<h2>Install</h2>
+
+<p>The usual for Node.js stuff</p>
+
+<pre><code>$ npm install perfectapi
+</code></pre>
+
+<p>or for a global install:</p>
+
+<pre><code>$ sudo npm install -g perfectapi
+</code></pre>
+
+<h2>How to include in your API</h2>
+
+<p>First, create a <code>perfectapi.json</code> configuration file.  See <a href="https://github.com/perfectapi/node-perfectapi/wiki/perfectapi-config-file-format">Configuration File</a> for details.   Once you have a configuration file, a sample usage is:</p>
+
+<pre><code>#!/usr/bin/env node
+
+var perfectapi = require('perfectapi');  
+var path = require('path');
+
+var configPath = path.resolve(__dirname, 'perfectapi.json');
+var parser = new perfectapi.Parser();
+
+//handle the commands
+parser.on("mycommand", function(config, callback) {
+    //do mycommand code, putting results into "result" object
+
+    //after done
+    callback(err, result);
+});
+
+parser.on("anothercommand", function(config, callback) {
+    //do anothercommand code, putting results into "result" object
+
+    //after done
+    callback(err, result);
+});
+
+//expose the api
+module.exports = parser.parse(configPath);
+</code></pre>
+
+<p>In your <code>package.json</code> file, be sure to specify the above file as a "bin", so that the app can be called from the command-line, e.g.</p>
+
+<pre><code>{ "name": "myNodeLib"
+, "version": "0.0.1"
+, "description": "My brilliant API"
+, "main": "./bin/myNodeLib.js"
+, "bin": "./bin/myNodeLib.js"
+, "engines": {
+    "node" : "&gt;=0.6.5"
+  }
+, "dependencies": {
+    "perfectapi": "&gt;=0.0.13"
+  }
+}
+</code></pre>
+
+<p>Thats it.  </p>
+
+<h2>Usage from another Node app</h2>
+
+<p>Other node apps can use your library (e.g. <code>myNodeLib</code>).  This is exactly the same as you might access any other API, except that the function signature is always the same <code>(config, callback)</code> and the callback is also always the same <code>function(err, result)</code>.  <code>result</code> is a return object with the structure defined in the configuration.</p>
+
+<pre><code>var test1=require('myNodeLib');
+
+var config = {}
+test1.mycommand(config, function(err, result) {
+    if (err) {
+        console.log('something went wrong: ' + err);
+    } else {
+        console.log('output = ' + JSON.stringify(result));
+    }
+});
+</code></pre>
+
+<h2>Usage from Javascript</h2>
+
+<p>Assuming the service is running at <a href="http://myserver.com:3000/apis">http://myserver.com:3000/apis</a>, code looks like below: </p>
+
+<pre><code>&lt;script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script src="//myserver.com:3000/apis/jquery.perfectapi.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+myNodeLib.callApi('myCommand', config, function(err, result) {
+  ...do stuff
+});
+&lt;/script&gt;
+</code></pre>
+
+<h2>Usage from command-line</h2>
+
+<p>Examples:</p>
+
+<pre><code>$ myapp --help
+
+  Usage: myapp [options] [command]
+
+  Commands:
+
+    gen [options] &lt;scripts&gt;
+    Generates a new Amazon EC2 image using the supplied scripts
+
+    scripts [options]
+    Lists available scripts for use in gen
+
+    server [options]
+    Run this API as a REST + JSON server
+
+  Options:
+
+    -h, --help  output usage information
+</code></pre>
+
+<p>Several commands are added automatically - <code>server</code>, <code>install</code>, <code>uninstall</code>, <code>config</code>.</p>
+
+<p>Focusing on just one of the commands:</p>
+
+<pre><code>$ myapp gen --help
+
+  Usage: gen [options] &lt;scripts&gt;
+
+  Options:
+
+    -h, --help         output usage information
+    -r, --root &lt;root&gt;  specify the root folder where scripts can be found
+    -a, --ami [ami]    the AMI name that will form the basis of the new images
+    -p, --publish      if set, the resulting AMI(s) will be made public
+</code></pre>
+
+<h2>Usage via proxy in Node</h2>
+
+<p>This is for accessing other PerfectAPI interfaces from Node.js.   The API you are accessing could be written in any language, but is written using PerfectAPI, and hosted somewhere on the Internet.  The syntax is almost identical to the normal Node usage, with the following differences:</p>
+
+<ul>
+<li>references a proxy endpoint (e.g. <a href="http://myserver.com:3000/apis">http://myserver.com:3000/apis</a>) instead of the downloaded Node package</li>
+<li>user code executes in a callback (because we have to wait for the endpoint to be validated and the proxy created)</li>
+</ul><pre><code>var perfectapi = require('perfectapi');
+perfectapi.proxy('<a href="http://myserver.com:3000/apis">http://myserver.com:3000/apis</a>', function(err, test1) {
+
+    var config = {}
+    test1.mycommand(config, function(err, result) {
+        if (err) {
+            console.log('something went wrong: ' + err);
+        } else {
+            console.log('output = ' + JSON.stringify(result));
+        }
+    });
+
+});
+</code></pre>
+
+<h2>Usage from C# (.NET Framework 4.0 or higher)</h2>
+
+<p>When running as a service, the service endpoint exposes a C# client at <code><a href="http://myserver.com/myapi/myapi.cs">http://myserver.com/myapi/myapi.cs</a></code>.  You should downloaded that file (once) and incorporate it into your C# project.  You will need the following references in your project, and you will need to target .NET 4 or later:</p>
+
+<ul>
+<li>System</li>
+<li>System.Core</li>
+<li>System.Runtime.Serialization</li>
+<li>System.Web</li>
+<li>System.Xml</li>
+<li>System.Xml.Linq</li>
+<li>Microsoft.CSharp</li>
+</ul><p>The following is an example of usage:</p>
+
+<pre><code>using System;
+using PerfectAPI.Client;
+
+namespace example
+{
+    class Program
+    {
+        public static void Main(string[] args)
+        {
+            var amigen = new Amigen();
+
+            var config = new Amigen.GenConfig();
+            config.Scripts = new string[] {@"ubuntu11.10\nodejs-stable"};
+            config.Options.Root = @"E:\Code\ami-generator\scripts\";
+            var result = amigen.Gen(config);
+
+            Console.WriteLine(result.RawResult);
+            Console.WriteLine(result.ParsedResult.ami);
+            Console.WriteLine(result.ParsedResult.region);
+
+            Console.Write("Press any key to continue . . . ");
+            Console.ReadKey(true);
+        }
+    }
+}
+</code></pre>
+
+<p>In the example above, the service name is <code>amigen</code> and the command being executed is <code>gen</code>.  The command accepts a parameter named <code>scripts</code> and has an option named <code>root</code>.  The results are available as raw JSON (<code>RawResult</code>) or as parsed JSON (<code>ParsedResult</code>).</p>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/perfectapi">perfectapi</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-26123362-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
