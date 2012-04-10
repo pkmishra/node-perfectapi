@@ -68,14 +68,14 @@ describe('Passing of parameters', function() {
   })
   
   it('should accept config in the body of a POST as single config param', function(done) {
-    var config = {param1: "param1value", param2: "param2value"};
+    var config = {param1: "param1value", param2: "param2value", options: {'option1': 'bar'} };
     request({method: 'POST', url: 'http://localhost:3001/api/test/multipleParamsPosted', json: config}, function (error, res, body) {
       res.statusCode.should.equal(200);
       
       var result = res.body;
       result.should.have.property('param1', 'param1value');
       result.should.have.property('param2', 'param2value');
-      result.options.should.have.property('option1', 'bla');
+      result.options.should.have.property('option1', 'bar');
       
       done();
     })
@@ -94,7 +94,7 @@ describe('Passing of parameters', function() {
   })
   
   after(function() {
-    var config = {command: 'stop' };
+    var config = {command: 'stop', options: {webworker: false} };
     testapi.server(config, function() {
       //should stop the server
     })  
